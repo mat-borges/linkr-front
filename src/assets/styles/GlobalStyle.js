@@ -1,3 +1,5 @@
+import { baseColor, textBaseColor } from '../../constants/colors';
+
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
@@ -32,6 +34,10 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	font-size: 17px;
+	font-family: 'Lato', sans-serif;
+	background-color: ${baseColor};
+	color: ${textBaseColor};
 }
 ol, ul {
 	list-style: none;
