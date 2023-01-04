@@ -1,4 +1,4 @@
-export const baseColor = '#E5E5E5';
+export const baseColor = '#333333';
 export const textBaseColor = '#FFFFFF';
 
 export const accentColor = '#171717';
