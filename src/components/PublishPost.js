@@ -24,7 +24,6 @@ export default function PublishPost() {
     setPublishing(true);
   }
 
-  console.log(form);
 
   return (
     <PublishContainer publishing={publishing}>
