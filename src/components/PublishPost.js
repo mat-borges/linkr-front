@@ -5,10 +5,12 @@ import {
   textBaseColor,
   textInputPublishColor,
   textPublishColor,
-} from '../constants/colors';
+} from '../constants/colors.js';
 
+import axios from 'axios';
 import logo from '../assets/images/logo.png';
 import styled from 'styled-components';
+import swal from 'sweetalert';
 import { useState } from 'react';
 
 export default function PublishPost() {
@@ -21,10 +23,27 @@ export default function PublishPost() {
 
   function post(e) {
     e.preventDefault();
+    const body = form;
+    const config = { headers: { authorization: `Bearer ${localStorage.token}` } };
     setPublishing(true);
-  }
 
-  console.log(form);
+    axios
+      .post(`${process.env.REACT_APP_API_BASE_URL}/posts/publish`, body, config)
+      .then(() => {
+        swal({ title: 'Link publicado com sucesso', icon: 'success' }).then((resp) => {
+          if (resp) {
+            setForm({ link: '', description: '' });
+            setPublishing(false);
+          }
+        });
+      })
+      .catch((err) => {
+        swal({ title: 'Houve um erro ao publicar seu link!', icon: 'error' }).then((resp) => {
+          if (resp) setPublishing(false);
+        });
+        console.log(err.response.data.errors);
+      });
+  }
 
   return (
     <PublishContainer publishing={publishing}>
@@ -74,7 +93,6 @@ const PublishContainer = styled.div`
     width: 2.6em;
     height: 2.6em;
     margin-right: 1.1rem;
-    border: 2px solid black;
     border-radius: 50%;
     object-fit: contain;
   }
