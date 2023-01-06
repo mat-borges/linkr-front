@@ -9,6 +9,7 @@ export default function Timeline() {
   const [posts, setPosts] = useState();
   const [loadingPage, setLoadingPage] = useState(true);
   const [error, setError] = useState(false);
+  const [refreshPage, setRefreshPage] = useState(false);
 
   useEffect(() => {
     axios
@@ -21,7 +22,7 @@ export default function Timeline() {
         setLoadingPage(false);
         setError(true);
       });
-  }, [posts]);
+  }, [refreshPage]);
 
   if (loadingPage === true) {
     return (
@@ -71,6 +72,8 @@ export default function Timeline() {
                 description={p.description}
                 name={p.name}
                 image={p.image}
+                refreshPage={refreshPage}
+                setRefreshPage={setRefreshPage}
               />
             ))
           ) : (
