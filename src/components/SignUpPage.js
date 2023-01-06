@@ -3,7 +3,7 @@ import logo from '../assets/images/linkr.png'
 import description from '../assets/images/description.png'
 import { Link } from "react-router-dom";
 
-export default function SignIn () {
+export default function SignUp () {
     return(
         <Main>
             <Logo>
@@ -12,11 +12,14 @@ export default function SignIn () {
             </Logo>
             <LoginPage>
                 <Formulario >
-                    <input  type="email"  placeholder="e-mail"  required />
-                    <input  type="password" placeholder="password"  required />
-                    <button type="subimit">Log In</button>
+                <input  type="email"  placeholder="e-mail" required />
+                <input  type="password" placeholder="password" required />
+                <input  type="password" placeholder="password comfirm" required />
+                <input  type="text" placeholder="username" required />
+                <input  type="text" placeholder="picture url" required />
+                <button type="subimit">Sign Up</button>
                 </Formulario>
-            <Link to="/signup">First time? Create an account!</Link>
+            <Link to="/">Switch back to log in</Link>
        
             </LoginPage>
         </Main>

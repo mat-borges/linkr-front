@@ -4,6 +4,7 @@ import GlobalStyle from './assets/styles/GlobalStyle.js';
 import Header from './components/Header/Header.js';
 import Timeline from './pages/Timeline.js';
 import SignIn from './components/SignInPage.js';
+import SignUp from './components/SignUpPage.js';
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
       {<Header />}
       <Routes>
         <Route path='/' exact element={<SignIn/>} />
-        <Route path='/signup' exact element={<></>} />
+        <Route path='/signup' exact element={<SignUp/>} />
         <Route path='/timeline' element={<Timeline/>}/>
       </Routes>
     </BrowserRouter>
