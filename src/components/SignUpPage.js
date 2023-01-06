@@ -115,7 +115,7 @@ margin-top: 30%;
         }
         @media (max-width: 660px){
             width: 330px;
-            height: 60px;
+            height: 50px;
         }
     }
     button{
