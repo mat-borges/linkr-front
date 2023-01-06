@@ -5,6 +5,7 @@ import Header from './components/Header/Header.js';
 import Timeline from './pages/Timeline.js';
 import SignIn from './components/SignInPage.js';
 import SignUp from './components/SignUpPage.js';
+import Hashtag from './pages/Hashtag.js';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path='/' exact element={<SignIn/>} />
         <Route path='/signup' exact element={<SignUp/>} />
         <Route path='/timeline' element={<Timeline/>}/>
+        <Route path='/hashtag/:hashtag' element={<Hashtag/>}/>
       </Routes>
     </BrowserRouter>
   );
