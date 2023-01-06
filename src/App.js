@@ -11,7 +11,7 @@ function App() {
       <Header />
       <Routes>
         <Route path='/' element={<></>} />
-        <Route path='/timeline' element={<Timeline/>}/>
+        <Route path='/timeline' element={<Timeline />} />
       </Routes>
     </BrowserRouter>
   );
