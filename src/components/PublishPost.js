@@ -24,7 +24,11 @@ export default function PublishPost() {
   function post(e) {
     e.preventDefault();
     const body = form;
-    const config = { headers: { authorization: `Bearer ${localStorage.token}` } };
+    const config = {
+      headers: {
+        authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJuYW1lIjoiTWF0ZXVzIEJvcmdlcyIsImltYWdlIjoiaHR0cHM6Ly9wYnMudHdpbWcuY29tL21lZGlhL0ZBQzJ2OU9Wa0FBSXZkMi5qcGciLCJpYXQiOjE2NzMwMjIyNTl9.w_1r8epDviaonmNIlV3xVTToWYR0SHvX45TKm4ib9xs`,
+      },
+    };
     setPublishing(true);
 
     axios
