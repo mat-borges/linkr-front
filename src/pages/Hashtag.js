@@ -61,7 +61,7 @@ export default function Hashtag() {
     return (
       <Main>
         <AreaUtil>
-        <Title># {hashtag}</Title>
+          <Title># {hashtag}</Title>
           {posts !== [] ? (
             posts.map((p) => (
               <SinglePost
