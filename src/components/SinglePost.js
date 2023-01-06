@@ -1,7 +1,12 @@
 import styled from "styled-components"
 import { IoHeartOutline } from "react-icons/io5"
+import {ReactTagify} from "react-tagify"
+import {textBaseColor} from '../constants/colors'
+import { useNavigate } from "react-router-dom"
 
 export default function SinglePost({link, description, image, name}) {
+    const navigate = useNavigate();
+
     /* const [metadata, setMetadata] = useState({})
     useEffect(() => {
         urlMetaData("").then((res) => {
@@ -17,7 +22,11 @@ export default function SinglePost({link, description, image, name}) {
             </Left>
             <Right>
                 <Name>{name}</Name>
+            <ReactTagify 
+                colors={textBaseColor} 
+                tagClicked={(tag)=> alert(tag)}>
                 <Description>{description}</Description>
+            </ReactTagify>
                 <Snippet onClick={() => window.open(link)}>
                     <div>
                         <MetaTitle>Como aplicar o Material UI em um projeto React</MetaTitle>
