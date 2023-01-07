@@ -9,10 +9,13 @@ export default function Hashtag() {
   const { hashtag } = useParams();
   const [posts, setPosts] = useState();
   const [loadingPage, setLoadingPage] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState();
+  const [refreshPage, setRefreshPage] = useState(false);
 
   useEffect(() => {
-    axios.get(`http://${process.env.REACT_APP_API_BASE_URL}/timeline`)
+    setLoadingPage(true);
+    axios
+      .get(`http://${process.env.REACT_APP_API_BASE_URL}/hashtag/${hashtag}`)
       .then((res) => {
         setPosts(res.data);
         setLoadingPage(false);
@@ -20,8 +23,11 @@ export default function Hashtag() {
       .catch((err) => {
         setLoadingPage(false);
         setError(true);
+        if (err.response.status === 404) {
+          alert("Não há posts nessa trend");
+        }
       });
-  }, [posts]);
+  }, [refreshPage]);
 
   if (loadingPage === true) {
     return (
@@ -70,6 +76,8 @@ export default function Hashtag() {
                 description={p.description}
                 name={p.name}
                 image={p.image}
+                refreshPage={refreshPage}
+                setRefreshPage={setRefreshPage}
               />
             ))
           ) : (
