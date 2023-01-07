@@ -16,7 +16,6 @@ export default function SinglePost({
   function navigateToTrend(str) {
     const newStr = str.replace("#", "");
     setRefreshPage(!refreshPage);
-    console.log("clicou")
     navigate(`/hashtag/${newStr}`);
   }
 
