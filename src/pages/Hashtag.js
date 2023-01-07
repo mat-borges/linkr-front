@@ -4,6 +4,7 @@ import styled from "styled-components";
 import SinglePost from "../components/SinglePost";
 import { ThreeDots } from "react-loader-spinner";
 import { useParams } from "react-router-dom";
+import swal from "sweetalert";
 
 export default function Hashtag() {
   const { hashtag } = useParams();
@@ -24,7 +25,7 @@ export default function Hashtag() {
         setLoadingPage(false);
         setError(true);
         if (err.response.status === 404) {
-          alert("Não há posts nessa trend");
+          swal("ERROR 404","Não há posts nessa trend.","info");
         }
       });
   }, [refreshPage]);
@@ -59,7 +60,6 @@ export default function Hashtag() {
         <Title># {hashtag}</Title>
         <ErrorMessage>
           Ocorreu um erro ao tentar buscar os posts, <br />
-          atualize a página
         </ErrorMessage>
       </Main>
     );
