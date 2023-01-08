@@ -10,11 +10,11 @@ function App() {
   return (
     <BrowserRouter>
       <GlobalStyle />
-      {<Header />}
+      <Header />
       <Routes>
-        <Route path='/' exact element={<SignIn />} />
-        <Route path='/signup' exact element={<SignUp />} />
-        <Route path='/timeline' element={<Timeline />} />
+        <Route exact path='/' element={<SignIn />} />
+        <Route exact path='/signup' element={<SignUp />} />
+        <Route exact path='/timeline' element={<Timeline />} />
       </Routes>
     </BrowserRouter>
   );
