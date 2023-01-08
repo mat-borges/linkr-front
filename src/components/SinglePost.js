@@ -21,7 +21,6 @@ export default function SinglePost({ link, description, image, name, posts_id, r
   function navigateToTrend(str) {
     const newStr = str.replace('#', '');
     setRefreshPage(!refreshPage);
-    console.log('clicou');
     navigate(`/hashtag/${newStr}`);
   }
 

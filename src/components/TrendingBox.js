@@ -41,7 +41,7 @@ export default function TrendingBox() {
         ) : (
           hashtags.map((hashtag) => {
             return (
-              <li key={hashtag.hashtag_id} onClick={() => navigate(`/hashtag/${hashtag.hashtag_id}`)}>
+              <li key={hashtag.hashtag_id} onClick={() => navigate(`/hashtag/${hashtag.name}`)}>
                 # {hashtag.name}
               </li>
             );
