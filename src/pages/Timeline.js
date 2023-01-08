@@ -1,9 +1,10 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import PublishPost from "../components/PublishPost";
-import SinglePost from "../components/SinglePost";
-import { ThreeDots } from "react-loader-spinner";
+import { useEffect, useState } from 'react';
+
+import PublishPost from '../components/PublishPost';
+import SinglePost from '../components/SinglePost';
+import { ThreeDots } from 'react-loader-spinner';
+import axios from 'axios';
+import styled from 'styled-components';
 
 export default function Timeline() {
   const [posts, setPosts] = useState();
@@ -13,7 +14,7 @@ export default function Timeline() {
 
   useEffect(() => {
     axios
-      .get(`http://${process.env.REACT_APP_API_BASE_URL}/timeline`)
+      .get(`${process.env.REACT_APP_API_BASE_URL}/timeline`)
       .then((res) => {
         setPosts(res.data);
         setLoadingPage(false);
@@ -29,19 +30,19 @@ export default function Timeline() {
       <Main>
         <Title>timeline</Title>
         <PublishPost />
-        <div class="loading">
+        <div class='loading'>
           <ThreeDots
-            height="80"
-            width="80"
-            radius="9"
-            color="#4fa94d"
-            ariaLabel="three-dots-loading"
+            height='80'
+            width='80'
+            radius='9'
+            color='#4fa94d'
+            ariaLabel='three-dots-loading'
             wrapperStyle={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
-            wrapperClassName="loading"
+            wrapperClassName='loading'
             visible={true}
           />
         </div>
@@ -87,7 +88,7 @@ const AreaUtil = styled.div``;
 
 const ErrorMessage = styled.p`
   text-align: center;
-  font-family: "Oswald";
+  font-family: 'Oswald';
   font-style: italic;
   font-weight: 400;
   font-size: 20px;
@@ -97,7 +98,7 @@ const ErrorMessage = styled.p`
 const Title = styled.div`
   margin-top: 19px;
   margin-bottom: 19px;
-  font-family: "Oswald";
+  font-family: 'Oswald';
   font-style: normal;
   font-weight: 700;
   font-size: 33px;

@@ -1,10 +1,11 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import SinglePost from "../components/SinglePost";
-import { ThreeDots } from "react-loader-spinner";
-import { useParams } from "react-router-dom";
-import Swal from 'sweetalert2'
+import { useEffect, useState } from 'react';
+
+import SinglePost from '../components/SinglePost';
+import Swal from 'sweetalert2';
+import { ThreeDots } from 'react-loader-spinner';
+import axios from 'axios';
+import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 
 export default function Hashtag() {
   const { hashtag } = useParams();
@@ -16,7 +17,7 @@ export default function Hashtag() {
   useEffect(() => {
     setLoadingPage(true);
     axios
-      .get(`http://${process.env.REACT_APP_API_BASE_URL}/hashtag/${hashtag}`)
+      .get(`${process.env.REACT_APP_API_BASE_URL}/hashtag/${hashtag}`)
       .then((res) => {
         setPosts(res.data);
         setLoadingPage(false);
@@ -25,29 +26,29 @@ export default function Hashtag() {
         setLoadingPage(false);
         setError(true);
         if (err.response.status === 404) {
-          Swal("ERROR 404","Não há posts nessa trend.","info");
+          Swal('ERROR 404', 'Não há posts nessa trend.', 'info');
         }
       });
-  }, [refreshPage]);
+  }, [refreshPage, hashtag]);
 
   if (loadingPage === true) {
     return (
       <Main>
         <AreaUtil>
           <Title># {hashtag}</Title>
-          <div class="loading">
+          <div class='loading'>
             <ThreeDots
-              height="80"
-              width="80"
-              radius="9"
-              color="#4fa94d"
-              ariaLabel="three-dots-loading"
+              height='80'
+              width='80'
+              radius='9'
+              color='#4fa94d'
+              ariaLabel='three-dots-loading'
               wrapperStyle={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
-              wrapperClassName="loading"
+              wrapperClassName='loading'
               visible={true}
             />
           </div>
@@ -93,7 +94,7 @@ const AreaUtil = styled.div``;
 
 const ErrorMessage = styled.p`
   text-align: center;
-  font-family: "Oswald";
+  font-family: 'Oswald';
   font-style: italic;
   font-weight: 400;
   font-size: 20px;
@@ -103,7 +104,7 @@ const ErrorMessage = styled.p`
 const Title = styled.div`
   margin-top: 19px;
   margin-bottom: 19px;
-  font-family: "Oswald";
+  font-family: 'Oswald';
   font-style: normal;
   font-weight: 700;
   font-size: 33px;
