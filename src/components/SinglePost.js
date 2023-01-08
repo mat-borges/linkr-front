@@ -3,6 +3,9 @@ import { IoHeartOutline, IoTrashSharp } from "react-icons/io5"
 import { MdOutlineModeEditOutline } from "react-icons/md"
 import { useState } from "react"
 import Modal from "./Modal/Modal"
+import {ReactTagify} from "react-tagify"
+import {textBaseColor} from '../constants/colors'
+import { useNavigate } from "react-router-dom"
 
 export default function SinglePost({ link, description, image, name, posts_id}) {
     const [modalIsOpen, setModalIsOpen] = useState(false)

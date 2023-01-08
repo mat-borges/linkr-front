@@ -4,7 +4,7 @@ import styled from "styled-components";
 import SinglePost from "../components/SinglePost";
 import { ThreeDots } from "react-loader-spinner";
 import { useParams } from "react-router-dom";
-import swal from "sweetalert";
+import Swal from 'sweetalert2'
 
 export default function Hashtag() {
   const { hashtag } = useParams();
@@ -25,7 +25,7 @@ export default function Hashtag() {
         setLoadingPage(false);
         setError(true);
         if (err.response.status === 404) {
-          swal("ERROR 404","Não há posts nessa trend.","info");
+          Swal("ERROR 404","Não há posts nessa trend.","info");
         }
       });
   }, [refreshPage]);
