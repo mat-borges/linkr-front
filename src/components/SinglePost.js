@@ -2,10 +2,13 @@ import { IoHeartOutline, IoTrashSharp } from 'react-icons/io5';
 
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import Modal from './Modal/Modal';
+import { ReactTagify } from 'react-tagify';
 import styled from 'styled-components';
+import { textBaseColor } from '../constants/colors';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-export default function SinglePost({ link, description, image, name, posts_id }) {
+export default function SinglePost({ link, description, image, name, posts_id, refreshPage, setRefreshPage }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   /* const [metadata, setMetadata] = useState({})
     useEffect(() => {
@@ -13,6 +16,14 @@ export default function SinglePost({ link, description, image, name, posts_id })
             setMetadata(res)
         })
     }, [metadata]) */
+
+  const navigate = useNavigate();
+  function navigateToTrend(str) {
+    const newStr = str.replace('#', '');
+    setRefreshPage(!refreshPage);
+    console.log('clicou');
+    navigate(`/hashtag/${newStr}`);
+  }
 
   return (
     <PostContainer>
@@ -29,10 +40,13 @@ export default function SinglePost({ link, description, image, name, posts_id })
             <IoTrashSharp onClick={() => setModalIsOpen(true)} />
           </div>
         </Title>
-        <Description>{description}</Description>
+        <ReactTagify colors={textBaseColor} tagClicked={(tag) => navigateToTrend(tag)}>
+          <Description>{description}</Description>
+        </ReactTagify>
         <Snippet onClick={() => window.open(link)}>
           <div>
             <MetaTitle>Como aplicar o Material UI em um projeto React</MetaTitle>
+
             <MetaDescription>
               Hey! I have moved this tutorial to my personal blog. Same content, new location. Sorry about making you
               click through to another page.

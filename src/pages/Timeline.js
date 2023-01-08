@@ -11,6 +11,7 @@ import { textBaseColor } from '../constants/colors';
 export default function Timeline() {
   const [posts, setPosts] = useState();
   const [loadingPage, setLoadingPage] = useState(true);
+  const [refreshPage, setRefreshPage] = useState(false);
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -24,7 +25,7 @@ export default function Timeline() {
         setLoadingPage(false);
         setError(true);
       });
-  }, []);
+  }, [refreshPage]);
 
   if (loadingPage === true) {
     return (
@@ -89,6 +90,8 @@ export default function Timeline() {
                   name={p.name}
                   image={p.image}
                   posts_id={p.posts_id}
+                  refreshPage={refreshPage}
+                  setRefreshPage={setRefreshPage}
                 />
               ))
             ) : (
