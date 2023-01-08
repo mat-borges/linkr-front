@@ -34,7 +34,7 @@ export default function SignIn () {
 
         promisse.then((res) => {
             console.log(res.data);
-            setToken(res.data.token);
+            setToken(res.token);
             setClicado(!clicado);
             navigate("/timeline")
         })
