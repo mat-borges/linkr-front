@@ -1,33 +1,46 @@
 import styled from "styled-components"
-import { IoHeartOutline } from "react-icons/io5"
+import { IoHeartOutline, IoTrashSharp } from "react-icons/io5"
+import { MdOutlineModeEditOutline } from "react-icons/md"
+import { useState } from "react"
+import Modal from "./Modal/Modal"
 
-export default function SinglePost({link, description, image, name}) {
+export default function SinglePost({ link, description, image, name, posts_id}) {
+    const [modalIsOpen, setModalIsOpen] = useState(false)
     /* const [metadata, setMetadata] = useState({})
     useEffect(() => {
         urlMetaData("").then((res) => {
             setMetadata(res)
         })
     }, [metadata]) */
+   
     return (
         <PostContainer>
             <Left>
-                <img src={image} />
-                <IoHeartOutline style={{marginBottom: "12px", cursor: "pointer"}}/>
+                <img src={image}/>
+                <IoHeartOutline style={{ marginBottom: "12px", cursor: "pointer" }} />
                 <Likes>13 likes</Likes>
             </Left>
             <Right>
-                <Name>{name}</Name>
-                <Description>{description}</Description>
+                <Title>
+                    <Name>{name}</Name>
+                    <div>
+                        <MdOutlineModeEditOutline />
+                        <IoTrashSharp onClick={() => setModalIsOpen(true)} />
+                    </div>
+                </Title>
+                <Description >{description}</Description>
                 <Snippet onClick={() => window.open(link)}>
                     <div>
                         <MetaTitle>Como aplicar o Material UI em um projeto React</MetaTitle>
                         <MetaDescription>Hey! I have moved this tutorial to my personal blog. Same content, new location. Sorry about making you click through to another page.</MetaDescription>
                         <MetaLink>{link}</MetaLink>
                     </div>
-                    <img src="https://i.kym-cdn.com/entries/icons/original/000/016/546/hidethepainharold.jpg"/>
+                    <img src="https://i.kym-cdn.com/entries/icons/original/000/016/546/hidethepainharold.jpg" />
                 </Snippet>
             </Right>
-        </PostContainer>
+            <Modal setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} posts_id={posts_id}/>
+
+        </PostContainer >
     )
 }
 
@@ -150,3 +163,14 @@ font-size: 9px;
 text-align: center;
 color: #FFFFFF;
 `
+
+const Title = styled.div`
+display: flex;
+justify-content: space-between;
+div{
+    display: flex;
+    width: 45px;
+    justify-content: space-between;
+}
+`
+

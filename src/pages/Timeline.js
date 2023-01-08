@@ -64,7 +64,7 @@ export default function Timeline() {
                 <PublishPost />
                 {posts !== [] ? 
                 posts.map((p) =>
-                <SinglePost link={p.link} description={p.description} name={p.name} image={p.image}/>
+                <SinglePost link={p.link} description={p.description} name={p.name} image={p.image} posts_id={p.posts_id}/>
                 )
                 :
                 <ErrorMessage>Ainda não há posts</ErrorMessage>
