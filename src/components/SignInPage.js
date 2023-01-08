@@ -13,6 +13,8 @@ export default function SignIn () {
     const [password, setPassword] = useState("");
     const [clicado, setClicado] = useState(false)
 
+    let key = 'token';
+
     const navigate = useNavigate();
 
     function login (e){
@@ -33,9 +35,9 @@ export default function SignIn () {
         const promisse = axios.post(URL, body);
 
         promisse.then((res) => {
-            console.log(res.data);
-            setToken(res.token);
+            setToken(res.data.token);
             setClicado(!clicado);
+            localStorage.setItem(key, res.data.token);
             navigate("/timeline")
         })
         promisse.catch((err) => {
