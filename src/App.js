@@ -3,9 +3,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import GlobalStyle from './assets/styles/GlobalStyle.js';
 import Hashtag from './pages/Hashtag.js';
 import Header from './components/Header/Header.js';
-import SignIn from './components/SignInPage.js';
-import SignUp from './components/SignUpPage.js';
-import Timeline from './pages/Timeline.js';
+import SignIn from './pages/SignInPage/SignInPage.js';
+import SignUp from './pages/SignUpPage/SignUpPage.js';
+import Timeline from './pages/TimelinePage/TimelinePage.js';
 
 function App() {
   return (
