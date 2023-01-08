@@ -17,7 +17,7 @@ export default function Hashtag() {
   useEffect(() => {
     setLoadingPage(true);
     axios
-      .get(`http://${process.env.REACT_APP_API_BASE_URL}/hashtag/${hashtag}`)
+      .get(`${process.env.REACT_APP_API_BASE_URL}/hashtag/${hashtag}`)
       .then((res) => {
         setPosts(res.data);
         setLoadingPage(false);
