@@ -1,9 +1,49 @@
 import styled from "styled-components";
 import logo from '../assets/images/linkr.png'
 import description from '../assets/images/description.png'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { CustomerContext } from "./context/customer.js";
+import axios from "axios";
 
 export default function SignIn () {
+
+    const {setToken} = useContext(CustomerContext)
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [clicado, setClicado] = useState(false)
+
+    const navigate = useNavigate();
+
+    function login (e){
+        e.preventDefault();
+
+        if(clicado){
+            return
+        }
+        setClicado(!clicado);
+
+        const URL = "http://localhost:4000/signin";
+
+        const body = {
+            email,
+            password
+        }
+
+        const promisse = axios.post(URL, body);
+
+        promisse.then((res) => {
+            console.log(res.data);
+            setToken(res.data.token);
+            setClicado(!clicado);
+            navigate("/timeline")
+        })
+        promisse.catch((err) => {
+            console.log(err.message)
+            alert(err.message)
+        })
+    }
+
     return(
         <Main>
             <Logo>
@@ -11,10 +51,10 @@ export default function SignIn () {
                 <Logo2 src={description} />
             </Logo>
             <LoginPage>
-                <Formulario >
-                    <input  type="email"  placeholder="e-mail"  required />
-                    <input  type="password" placeholder="password"  required />
-                    <button type="subimit">Log In</button>
+                <Formulario clicado={clicado} onSubmit={login}>
+                    <input  type="email"  placeholder="e-mail" value={email} onChange={e => setEmail(e.target.value)} required />
+                    <input  type="password" placeholder="password" value={password} onChange={e => setPassword(e.target.value)} required />
+                    <button  type="subimit">Log In</button>
                 </Formulario>
             <Link to="/signup">First time? Create an account!</Link>
        
@@ -120,12 +160,14 @@ margin-top: 30%;
         width: 429px;
         height: 65px;
         background-color: #1877F2;
+        opacity: ${props => props.clicado ? 0.2 : 1};
         font-weight: 700;
         color: white;
         font-size: 21px;
         margin: 7px auto 15px;
         border: none;
         border-radius: 6px;
+        
         cursor: pointer;
         @media (max-width: 660px){
             width: 330px;
