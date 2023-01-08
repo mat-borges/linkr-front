@@ -28,7 +28,7 @@ export default function SinglePost({ link, description, image, name, posts_id, r
   return (
     <PostContainer>
       <Left>
-        <img src={image} />
+        <img src={image} alt='userImage' />
         <IoHeartOutline style={{ marginBottom: '12px', cursor: 'pointer' }} />
         <Likes>13 likes</Likes>
       </Left>
@@ -53,7 +53,7 @@ export default function SinglePost({ link, description, image, name, posts_id, r
             </MetaDescription>
             <MetaLink>{link}</MetaLink>
           </div>
-          <img src='https://i.kym-cdn.com/entries/icons/original/000/016/546/hidethepainharold.jpg' />
+          <img src='https://i.kym-cdn.com/entries/icons/original/000/016/546/hidethepainharold.jpg' alt='linkImage' />
         </Snippet>
       </Right>
       <Modal setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} posts_id={posts_id} />

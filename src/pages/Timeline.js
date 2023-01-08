@@ -34,7 +34,7 @@ export default function Timeline() {
         <Container>
           <LeftBox>
             <PublishPost />
-            <div class='loading'>
+            <div className='loading'>
               <ThreeDots
                 height='80'
                 width='80'
@@ -85,6 +85,7 @@ export default function Timeline() {
             {posts !== [] ? (
               posts.map((p) => (
                 <SinglePost
+                  key={p.posts_id}
                   link={p.link}
                   description={p.description}
                   name={p.name}
