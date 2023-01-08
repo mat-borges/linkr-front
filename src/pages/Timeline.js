@@ -24,65 +24,56 @@ export default function Timeline() {
       });
   }, [refreshPage]);
 
-  if (loadingPage === true) {
-    return (
-      <Main>
-        <Title>timeline</Title>
-        <PublishPost />
-        <div class="loading">
-          <ThreeDots
-            height="80"
-            width="80"
-            radius="9"
-            color="#4fa94d"
-            ariaLabel="three-dots-loading"
-            wrapperStyle={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            wrapperClassName="loading"
-            visible={true}
-          />
-        </div>
-      </Main>
-    );
-  } else if (error === true) {
-    return (
-      <Main>
-        <Title>timeline</Title>
-        <PublishPost />
-        <ErrorMessage>
-          Ocorreu um erro ao tentar buscar os posts, <br />
-          atualize a página
-        </ErrorMessage>
-      </Main>
-    );
-  } else {
-    return (
-      <Main>
-        <AreaUtil>
-          <Title>timeline</Title>
-          <PublishPost />
-          {posts !== [] ? (
-            posts.map((p) => (
-              <SinglePost
-                key={p.posts_id}
-                link={p.link}
-                description={p.description}
-                name={p.name}
-                image={p.image}
-                refreshPage={refreshPage}
-                setRefreshPage={setRefreshPage}
-              />
-            ))
-          ) : (
-            <ErrorMessage>Ainda não há posts</ErrorMessage>
-          )}
-        </AreaUtil>
-      </Main>
-    );
-  }
+    if (loadingPage === true) {
+        return (
+            <Main>
+                <Title>timeline</Title>
+                <PublishPost />
+                <div class="loading">
+                    <ThreeDots
+                        height="80"
+                        width="80"
+                        radius="9"
+                        color="#4fa94d"
+                        ariaLabel="three-dots-loading"
+                        wrapperStyle={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center"
+                        }}
+                        wrapperClassName="loading"
+                        visible={true}
+                    />
+                </div>
+            </Main>
+        )
+
+    } else if(error === true){
+        return (
+            <Main>
+                <Title>
+                    timeline</Title>
+                <PublishPost />
+                <ErrorMessage>Ocorreu um erro ao tentar buscar os posts, <br/>atualize a página</ErrorMessage>
+            </Main>
+        )
+    }else {
+        return (
+            <Main>
+                <Title>
+                    timeline</Title>
+                <PublishPost />
+                {posts !== [] ? 
+                posts.map((p) =>
+                <SinglePost link={p.link} description={p.description} name={p.name} image={p.image} posts_id={p.posts_id}/>
+                )
+                :
+                <ErrorMessage>Ainda não há posts</ErrorMessage>
+                
+    }
+            </Main>
+        )
+    }
 }
 
 const AreaUtil = styled.div``;

@@ -1,62 +1,47 @@
-import styled from "styled-components";
-import { IoHeartOutline } from "react-icons/io5";
-import { ReactTagify } from "react-tagify";
-import { textBaseColor } from "../constants/colors";
-import { useNavigate } from "react-router-dom";
+import styled from "styled-components"
+import { IoHeartOutline, IoTrashSharp } from "react-icons/io5"
+import { MdOutlineModeEditOutline } from "react-icons/md"
+import { useState } from "react"
+import Modal from "./Modal/Modal"
 
-export default function SinglePost({
-  link,
-  description,
-  image,
-  name,
-  refreshPage,
-  setRefreshPage,
-}) {
-  const navigate = useNavigate();
-  function navigateToTrend(str) {
-    const newStr = str.replace("#", "");
-    setRefreshPage(!refreshPage);
-    navigate(`/hashtag/${newStr}`);
-  }
-
-  /* const [metadata, setMetadata] = useState({})
+export default function SinglePost({ link, description, image, name, posts_id}) {
+    const [modalIsOpen, setModalIsOpen] = useState(false)
+    /* const [metadata, setMetadata] = useState({})
     useEffect(() => {
         urlMetaData("").then((res) => {
             setMetadata(res)
         })
     }, [metadata]) */
-  return (
-    <PostContainer>
-      <Left>
-        <img src={image} />
-        <IoHeartOutline style={{ marginBottom: "12px", cursor: "pointer" }} />
-        <Likes>13 likes</Likes>
-      </Left>
-      <Right>
-        <Name>{name}</Name>
-        <ReactTagify
-          colors={textBaseColor}
-          tagClicked={(tag) => navigateToTrend(tag)}
-        >
-          <Description>{description}</Description>
-        </ReactTagify>
-        <Snippet onClick={() => window.open(link)}>
-          <div>
-            <MetaTitle>
-              Como aplicar o Material UI em um projeto React
-            </MetaTitle>
-            <MetaDescription>
-              Hey! I have moved this tutorial to my personal blog. Same content,
-              new location. Sorry about making you click through to another
-              page.
-            </MetaDescription>
-            <MetaLink>{link}</MetaLink>
-          </div>
-          <img src="https://i.kym-cdn.com/entries/icons/original/000/016/546/hidethepainharold.jpg" />
-        </Snippet>
-      </Right>
-    </PostContainer>
-  );
+   
+    return (
+        <PostContainer>
+            <Left>
+                <img src={image}/>
+                <IoHeartOutline style={{ marginBottom: "12px", cursor: "pointer" }} />
+                <Likes>13 likes</Likes>
+            </Left>
+            <Right>
+                <Title>
+                    <Name>{name}</Name>
+                    <div>
+                        <MdOutlineModeEditOutline />
+                        <IoTrashSharp onClick={() => setModalIsOpen(true)} />
+                    </div>
+                </Title>
+                <Description >{description}</Description>
+                <Snippet onClick={() => window.open(link)}>
+                    <div>
+                        <MetaTitle>Como aplicar o Material UI em um projeto React</MetaTitle>
+                        <MetaDescription>Hey! I have moved this tutorial to my personal blog. Same content, new location. Sorry about making you click through to another page.</MetaDescription>
+                        <MetaLink>{link}</MetaLink>
+                    </div>
+                    <img src="https://i.kym-cdn.com/entries/icons/original/000/016/546/hidethepainharold.jpg" />
+                </Snippet>
+            </Right>
+            <Modal setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} posts_id={posts_id}/>
+
+        </PostContainer >
+    )
 }
 
 const PostContainer = styled.div`
@@ -169,10 +154,21 @@ const Left = styled.div`
 `;
 
 const Likes = styled.p`
-  font-family: "Lato";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 9px;
-  text-align: center;
-  color: #ffffff;
-`;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 9px;
+text-align: center;
+color: #FFFFFF;
+`
+
+const Title = styled.div`
+display: flex;
+justify-content: space-between;
+div{
+    display: flex;
+    width: 45px;
+    justify-content: space-between;
+}
+`
+
