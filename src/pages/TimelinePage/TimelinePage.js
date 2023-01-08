@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 
-import PublishPost from '../components/PublishPost';
-import SinglePost from '../components/SinglePost';
+import PublishPost from '../../components/PublishPost.js';
+import SinglePost from '../../components/SinglePost.js';
 import { ThreeDots } from 'react-loader-spinner';
-import TrendingBox from '../components/TrendingBox.js';
+import TrendingBox from '../../components/TrendingBox.js';
 import axios from 'axios';
 import styled from 'styled-components';
-import { textBaseColor } from '../constants/colors';
+import { textBaseColor } from '../../constants/colors.js';
 
 export default function Timeline() {
   const [posts, setPosts] = useState();
