@@ -36,7 +36,7 @@ export default function Hashtag() {
       <Main>
         <AreaUtil>
           <Title># {hashtag}</Title>
-          <div class='loading'>
+          <div className='loading'>
             <ThreeDots
               height='80'
               width='80'
@@ -94,7 +94,7 @@ const AreaUtil = styled.div``;
 
 const ErrorMessage = styled.p`
   text-align: center;
-  font-family: 'Oswald';
+  font-family: 'Oswald', sans-serif;
   font-style: italic;
   font-weight: 400;
   font-size: 20px;
@@ -104,7 +104,7 @@ const ErrorMessage = styled.p`
 const Title = styled.div`
   margin-top: 19px;
   margin-bottom: 19px;
-  font-family: 'Oswald';
+  font-family: 'Oswald', sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 33px;

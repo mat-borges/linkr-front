@@ -1,21 +1,14 @@
-import styled from "styled-components";
-import { IoHeartOutline, IoTrashSharp } from "react-icons/io5";
-import { MdOutlineModeEditOutline } from "react-icons/md";
-import { useState } from "react";
-import Modal from "./Modal/Modal";
-import { ReactTagify } from "react-tagify";
-import { textBaseColor } from "../constants/colors";
-import { useNavigate } from "react-router-dom";
+import { IoHeartOutline, IoTrashSharp } from 'react-icons/io5';
 
-export default function SinglePost({
-  link,
-  description,
-  image,
-  name,
-  posts_id,
-  refreshPage,
-  setRefreshPage,
-}) {
+import { MdOutlineModeEditOutline } from 'react-icons/md';
+import Modal from './Modal/Modal';
+import { ReactTagify } from 'react-tagify';
+import styled from 'styled-components';
+import { textBaseColor } from '../constants/colors';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+
+export default function SinglePost({ link, description, image, name, posts_id, refreshPage, setRefreshPage }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   /* const [metadata, setMetadata] = useState({})
     useEffect(() => {
@@ -26,17 +19,17 @@ export default function SinglePost({
 
   const navigate = useNavigate();
   function navigateToTrend(str) {
-    const newStr = str.replace("#", "");
+    const newStr = str.replace('#', '');
     setRefreshPage(!refreshPage);
-    console.log("clicou");
+    console.log('clicou');
     navigate(`/hashtag/${newStr}`);
   }
 
   return (
     <PostContainer>
       <Left>
-        <img src={image} />
-        <IoHeartOutline style={{ marginBottom: "12px", cursor: "pointer" }} />
+        <img src={image} alt='userImage' />
+        <IoHeartOutline style={{ marginBottom: '12px', cursor: 'pointer' }} />
         <Likes>13 likes</Likes>
       </Left>
       <Right>
@@ -47,33 +40,23 @@ export default function SinglePost({
             <IoTrashSharp onClick={() => setModalIsOpen(true)} />
           </div>
         </Title>
-        <ReactTagify
-          colors={textBaseColor}
-          tagClicked={(tag) => navigateToTrend(tag)}
-        >
+        <ReactTagify colors={textBaseColor} tagClicked={(tag) => navigateToTrend(tag)}>
           <Description>{description}</Description>
         </ReactTagify>
         <Snippet onClick={() => window.open(link)}>
           <div>
-            <MetaTitle>
-              Como aplicar o Material UI em um projeto React
-            </MetaTitle>
+            <MetaTitle>Como aplicar o Material UI em um projeto React</MetaTitle>
 
             <MetaDescription>
-              Hey! I have moved this tutorial to my personal blog. Same content,
-              new location. Sorry about making you click through to another
-              page.
+              Hey! I have moved this tutorial to my personal blog. Same content, new location. Sorry about making you
+              click through to another page.
             </MetaDescription>
             <MetaLink>{link}</MetaLink>
           </div>
-          <img src="https://i.kym-cdn.com/entries/icons/original/000/016/546/hidethepainharold.jpg" />
+          <img src='https://i.kym-cdn.com/entries/icons/original/000/016/546/hidethepainharold.jpg' alt='linkImage' />
         </Snippet>
       </Right>
-      <Modal
-        setModalIsOpen={setModalIsOpen}
-        modalIsOpen={modalIsOpen}
-        posts_id={posts_id}
-      />
+      <Modal setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} posts_id={posts_id} />
     </PostContainer>
   );
 }
@@ -109,7 +92,7 @@ const Right = styled.div`
 `;
 
 const Name = styled.h1`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 17px;
@@ -117,7 +100,7 @@ const Name = styled.h1`
 `;
 
 const Description = styled.h2`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 15px;
@@ -153,7 +136,7 @@ const Snippet = styled.div`
 `;
 
 const MetaTitle = styled.h1`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 11px;
@@ -161,7 +144,7 @@ const MetaTitle = styled.h1`
 `;
 
 const MetaDescription = styled.h2`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 9px;
@@ -171,7 +154,7 @@ const MetaDescription = styled.h2`
 `;
 
 const MetaLink = styled.h3`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 11px;
@@ -188,7 +171,7 @@ const Left = styled.div`
 `;
 
 const Likes = styled.p`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 9px;
