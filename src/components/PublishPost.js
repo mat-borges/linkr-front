@@ -13,7 +13,7 @@ import styled from 'styled-components';
 import swal from 'sweetalert';
 import { useState } from 'react';
 
-export default function PublishPost() {
+export default function PublishPost({ refreshPage, setRefreshPage }) {
   const [form, setForm] = useState({ link: '', description: '' });
   const [publishing, setPublishing] = useState(false);
 
@@ -26,7 +26,7 @@ export default function PublishPost() {
     const body = form;
     const config = {
       headers: {
-        authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJuYW1lIjoiTWF0ZXVzIEJvcmdlcyIsImltYWdlIjoiaHR0cHM6Ly9wYnMudHdpbWcuY29tL21lZGlhL0ZBQzJ2OU9Wa0FBSXZkMi5qcGciLCJpYXQiOjE2NzMwMjIyNTl9.w_1r8epDviaonmNIlV3xVTToWYR0SHvX45TKm4ib9xs`,
+        authorization: `Bearer ${localStorage.token}`,
       },
     };
     setPublishing(true);
@@ -34,6 +34,7 @@ export default function PublishPost() {
     axios
       .post(`${process.env.REACT_APP_API_BASE_URL}/posts/publish`, body, config)
       .then(() => {
+        setRefreshPage(!refreshPage);
         swal({ title: 'Link publicado com sucesso', icon: 'success' }).then((resp) => {
           if (resp) {
             setForm({ link: '', description: '' });
