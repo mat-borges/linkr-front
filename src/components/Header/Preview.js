@@ -6,7 +6,8 @@ import TrendingBox from '../../components/TrendingBox.js';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-export default function Preview({ results, searchFocus, isVisible, setIsVisible, loading, searchInput }) {
+export default function Preview(props) {
+  const { results, searchFocus, isVisible, setIsVisible, loading, searchInput, setSearchInput } = props;
   const navigate = useNavigate();
   const ulRef = useRef(null);
   const minLength = 3;
@@ -20,6 +21,8 @@ export default function Preview({ results, searchFocus, isVisible, setIsVisible,
       const id = result.user_id;
       path = `/user/${id}`;
     }
+    setIsVisible(false);
+    setSearchInput('');
     navigate(path);
   }
 
