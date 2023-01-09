@@ -92,6 +92,7 @@ export default function Hashtag() {
             posts.map((p) => (
               <SinglePost
                 key={p.posts_id}
+                postOwner_id={p.user_id}
                 posts_id={p.posts_id}
                 link={p.link}
                 description={p.description}

@@ -103,6 +103,7 @@ export default function Timeline() {
               posts.map((p) => (
                 <SinglePost
                   key={p.posts_id}
+                  postOwner_id={p.user_id}
                   link={p.link}
                   description={p.description}
                   name={p.name}
