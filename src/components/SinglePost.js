@@ -179,7 +179,7 @@ export default function SinglePost({
         ) : (
           <>
             <IoHeartOutline id={posts_id} onClick={likePost} style={{ marginBottom: '12px', cursor: 'pointer' }} />
-            <Tooltip anchorId={posts_id} content='AINDA NÃO CURTI' place='bottom' />
+            <Tooltip anchorId={posts_id} content='Curtir!' place='bottom' />
           </>
         )}
         <Likes>{likes}</Likes>
