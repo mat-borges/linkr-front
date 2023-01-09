@@ -6,7 +6,7 @@ import axios from "axios";
 
 export default function SignIn () {
 
-    const {setToken} = useContext(CustomerContext)
+    const {setToken,setUserId,setUserImage} = useContext(CustomerContext)
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [clicado, setClicado] = useState(false)
@@ -34,8 +34,12 @@ export default function SignIn () {
 
         promisse.then((res) => {
             setToken(res.data.token);
+            setUserId(res.data.user_id);
+            setUserImage(res.data.user_image);
             setClicado(!clicado);
             localStorage.setItem(key, res.data.token);
+            localStorage.setItem('user_id', res.data.user_id);
+            localStorage.setItem('user_image', res.data.image);
             navigate("/timeline")
         })
         promisse.catch((err) => {

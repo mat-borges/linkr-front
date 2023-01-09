@@ -1,23 +1,42 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from "react";
 
-import SinglePost from '../../components/SinglePost';
-import swal from 'sweetalert';
-import { ThreeDots } from 'react-loader-spinner';
-import axios from 'axios';
-import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
-
+import SinglePost from "../../components/SinglePost";
+import swal from "sweetalert";
+import { ThreeDots } from "react-loader-spinner";
+import axios from "axios";
+import styled from "styled-components";
+import { useNavigate, useParams } from "react-router-dom";
+import { CustomerContext } from "../../components/context/customer";
 export default function Hashtag() {
   const { hashtag } = useParams();
   const [posts, setPosts] = useState();
   const [loadingPage, setLoadingPage] = useState(true);
   const [error, setError] = useState();
   const [refreshPage, setRefreshPage] = useState(false);
-
+  const { token, setToken, userId, setUserId, userImage, setUserImage } =
+    useContext(CustomerContext);
+  const navigate = useNavigate();
   useEffect(() => {
     setLoadingPage(true);
+    if (!localStorage.getItem("token")) {
+      swal(
+        "Usuário não logado!",
+        "Faça o login novamente para acessar suas informações.",
+        "error"
+      );
+      navigate("/");
+    }
+    setToken(localStorage.getItem("token"));
+    setUserId(localStorage.getItem("user_id"));
+    setUserImage(localStorage.getItem("user_image"));
+    const tempToken = localStorage.getItem("token");
+    const config = {
+      headers: {
+        authorization: `Bearer ${tempToken}`,
+      },
+    };
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/hashtag/${hashtag}`)
+      .get(`${process.env.REACT_APP_API_BASE_URL}/hashtag/${hashtag}`, config)
       .then((res) => {
         setPosts(res.data);
         setLoadingPage(false);
@@ -26,7 +45,7 @@ export default function Hashtag() {
         setLoadingPage(false);
         setError(true);
         if (err.response.status === 404) {
-          swal('ERROR 404', 'Não há posts nessa trend.', 'info');
+          swal("ERROR 404", "Não há posts nessa trend.", "info");
         }
       });
   }, [refreshPage, hashtag]);
@@ -36,19 +55,19 @@ export default function Hashtag() {
       <Main>
         <AreaUtil>
           <Title># {hashtag}</Title>
-          <div className='loading'>
+          <div className="loading">
             <ThreeDots
-              height='80'
-              width='80'
-              radius='9'
-              color='#4fa94d'
-              ariaLabel='three-dots-loading'
+              height="80"
+              width="80"
+              radius="9"
+              color="#4fa94d"
+              ariaLabel="three-dots-loading"
               wrapperStyle={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
-              wrapperClassName='loading'
+              wrapperClassName="loading"
               visible={true}
             />
           </div>
@@ -73,6 +92,7 @@ export default function Hashtag() {
             posts.map((p) => (
               <SinglePost
                 key={p.posts_id}
+                postOwner_id={p.user_id}
                 posts_id={p.posts_id}
                 link={p.link}
                 description={p.description}
@@ -95,7 +115,7 @@ const AreaUtil = styled.div``;
 
 const ErrorMessage = styled.p`
   text-align: center;
-  font-family: 'Oswald', sans-serif;
+  font-family: "Oswald", sans-serif;
   font-style: italic;
   font-weight: 400;
   font-size: 20px;
@@ -105,7 +125,7 @@ const ErrorMessage = styled.p`
 const Title = styled.div`
   margin-top: 19px;
   margin-bottom: 19px;
-  font-family: 'Oswald', sans-serif;
+  font-family: "Oswald", sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 33px;

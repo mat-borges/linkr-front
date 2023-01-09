@@ -17,7 +17,7 @@ export default function Header() {
   function logOut(e) {
     e.preventDefault();
 
-    const URL = "http://localhost:4000/logout";
+    const URL = `${process.env.REACT_APP_API_BASE_URL}/logout`;
 
     const body = {token};
 
@@ -25,6 +25,8 @@ export default function Header() {
       .then(() => {
         navigate("/");
         localStorage.removeItem('token');
+        localStorage.removeItem('user_id');
+        localStorage.removeItem('user_image');
         setToken("");
       })
       .catch((err) => console.log(err.response))
