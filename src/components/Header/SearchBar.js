@@ -50,7 +50,7 @@ export default function SearchBar() {
           element={SearchBarInput}
           id='search-bar'
           type='text'
-          placeholder='Procurar'
+          placeholder='Procurar (por usuário ou #hashtag)'
           autoComplete='off'
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
