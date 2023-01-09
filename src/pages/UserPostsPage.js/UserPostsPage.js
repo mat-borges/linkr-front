@@ -36,7 +36,6 @@ export default function UserPostPage() {
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/timeline/user/${id}`, config)
       .then((res) => {
-        console.log(res.data.posts);
         setPosts(res.data.posts);
         setUser(res.data.name);
         setLoadingPage(false);
