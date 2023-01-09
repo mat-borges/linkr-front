@@ -27,7 +27,6 @@ export default function SinglePost({
       .get(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/metadata`)
       .then((res) => {
         setMetadata(res.data);
-        console.log(res.data.image)
       })
       .catch((err) => {
         swal({
