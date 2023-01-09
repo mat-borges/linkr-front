@@ -1,12 +1,12 @@
+import { accentColor, textBaseColor } from '../../constants/colors.js';
 import { useEffect, useState } from 'react';
 
-import PublishPost from '../components/PublishPost';
-import SinglePost from '../components/SinglePost';
+import PublishPost from '../../components/PublishPost.js';
+import SinglePost from '../../components/SinglePost.js';
 import { ThreeDots } from 'react-loader-spinner';
-import TrendingBox from '../components/TrendingBox.js';
+import TrendingBox from '../../components/TrendingBox.js';
 import axios from 'axios';
 import styled from 'styled-components';
-import { textBaseColor } from '../constants/colors';
 
 export default function Timeline() {
   const [posts, setPosts] = useState();
@@ -15,8 +15,13 @@ export default function Timeline() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    const config = {
+      headers: {
+        authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJuYW1lIjoiTWF0ZXVzIEJvcmdlcyIsImltYWdlIjoiaHR0cHM6Ly9wYnMudHdpbWcuY29tL21lZGlhL0ZBQzJ2OU9Wa0FBSXZkMi5qcGciLCJpYXQiOjE2NzMwMjIyNTl9.w_1r8epDviaonmNIlV3xVTToWYR0SHvX45TKm4ib9xs`,
+      },
+    };
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/timeline`)
+      .get(`${process.env.REACT_APP_API_BASE_URL}/timeline`, config)
       .then((res) => {
         setPosts(res.data);
         setLoadingPage(false);
@@ -52,7 +57,13 @@ export default function Timeline() {
             </div>
           </LeftBox>
           <RightBox>
-            <TrendingBox />
+            <TrendingBox
+              background={accentColor}
+              color={textBaseColor}
+              hide='false'
+              width='20vw'
+              placedAt='TimelinePage'
+            />
           </RightBox>
         </Container>
       </Main>
@@ -70,7 +81,13 @@ export default function Timeline() {
             </ErrorMessage>
           </LeftBox>
           <RightBox>
-            <TrendingBox />
+            <TrendingBox
+              background={accentColor}
+              color={textBaseColor}
+              hide='false'
+              width='20vw'
+              placedAt='TimelinePage'
+            />
           </RightBox>
         </Container>
       </Main>
@@ -100,7 +117,13 @@ export default function Timeline() {
             )}
           </LeftBox>
           <RightBox>
-            <TrendingBox />
+            <TrendingBox
+              background={accentColor}
+              color={textBaseColor}
+              hide='false'
+              width='20vw'
+              placedAt='TimelinePage'
+            />
           </RightBox>
         </Container>
       </Main>

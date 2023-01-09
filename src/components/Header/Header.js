@@ -1,6 +1,7 @@
 import { accentColor, detailColor, textBaseColor } from '../../constants/colors.js';
 
 import { IoIosArrowDown } from 'react-icons/io';
+import SearchBar from './SearchBar.js';
 import logo from '../../assets/images/logo.png';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
@@ -37,13 +38,14 @@ export default function Header() {
   return (
     <HeaderContainer>
       <h1 onClick={() => navigate('/')}>linkr</h1>
-      <div onClick={() => setSideMenu(!sideMenu)}>
+      <SearchBar />
+      <RightBox onClick={() => setSideMenu(!sideMenu)}>
         <MenuIcon clicked={sideMenu ? 'true' : 'false'} size={'0.7em'} />
         <img src={logo} alt='userAvatar' />
         <SideMenu display={sideMenu ? 'true' : 'false'}>
           <li onClick={logUot}>LogOut</li>
         </SideMenu>
-      </div>
+      </RightBox>
     </HeaderContainer>
   );
 }
@@ -61,18 +63,19 @@ const HeaderContainer = styled.div`
     font-family: 'Passion One', cursive;
     cursor: pointer;
   }
-  div {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    img {
-      width: 1em;
-      margin-left: 1rem;
-      border: 2px solid ${textBaseColor};
-      border-radius: 50%;
-      cursor: pointer;
-    }
+`;
+
+const RightBox = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    width: 1em;
+    margin-left: 1rem;
+    border: 2px solid ${textBaseColor};
+    border-radius: 50%;
+    cursor: pointer;
   }
 `;
 
