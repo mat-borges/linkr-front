@@ -1,18 +1,10 @@
-import { createContext } from "react";
-import { useState } from "react";
+import { createContext } from 'react';
+import { useState } from 'react';
 
-
-export const CustomerContext = createContext()
-
+export const CustomerContext = createContext();
 
 export const CustomerProvider = ({ children }) => {
+  const [token, setToken] = useState('');
 
-    const [token, setToken] = useState("")
-
-    return(
-        <CustomerContext.Provider 
-            value={ {token, setToken} }>
-            {children}
-        </CustomerContext.Provider>
-    )
-}
+  return <CustomerContext.Provider value={{ token, setToken }}>{children}</CustomerContext.Provider>;
+};

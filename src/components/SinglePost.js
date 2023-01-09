@@ -1,24 +1,16 @@
-import { IoHeartOutline, IoTrashSharp } from "react-icons/io5";
+import { IoHeartOutline, IoTrashSharp } from 'react-icons/io5';
+import { useEffect, useState } from 'react';
 
-import { MdOutlineModeEditOutline } from "react-icons/md";
-import Modal from "./Modal/Modal";
-import { ReactTagify } from "react-tagify";
-import styled from "styled-components";
-import { textBaseColor } from "../constants/colors";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import swal from "sweetalert";
+import { MdOutlineModeEditOutline } from 'react-icons/md';
+import Modal from './Modal/Modal';
+import { ReactTagify } from 'react-tagify';
+import axios from 'axios';
+import styled from 'styled-components';
+import swal from 'sweetalert';
+import { textBaseColor } from '../constants/colors';
+import { useNavigate } from 'react-router-dom';
 
-export default function SinglePost({
-  link,
-  description,
-  image,
-  name,
-  posts_id,
-  refreshPage,
-  setRefreshPage,
-}) {
+export default function SinglePost({ link, description, image, name, posts_id, refreshPage, setRefreshPage }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [metadata, setMetadata] = useState({});
 
@@ -31,15 +23,15 @@ export default function SinglePost({
       .catch((err) => {
         swal({
           title: `Houve um erro ao carregar metadata do post ${posts_id}!`,
-          icon: "error",
+          icon: 'error',
         });
         console.log(err.response.data.errors);
       });
-  }, []);
+  }, [posts_id]);
 
   const navigate = useNavigate();
   function navigateToTrend(str) {
-    const newStr = str.replace("#", "");
+    const newStr = str.replace('#', '');
     setRefreshPage(!refreshPage);
     navigate(`/hashtag/${newStr}`);
   }
@@ -47,8 +39,8 @@ export default function SinglePost({
   return (
     <PostContainer>
       <Left>
-        <img src={image} alt="userImage" />
-        <IoHeartOutline style={{ marginBottom: "12px", cursor: "pointer" }} />
+        <img src={image} alt='userImage' />
+        <IoHeartOutline style={{ marginBottom: '12px', cursor: 'pointer' }} />
         <Likes>13 likes</Likes>
       </Left>
       <Right>
@@ -59,10 +51,7 @@ export default function SinglePost({
             <IoTrashSharp onClick={() => setModalIsOpen(true)} />
           </div>
         </Title>
-        <ReactTagify
-          colors={textBaseColor}
-          tagClicked={(tag) => navigateToTrend(tag)}
-        >
+        <ReactTagify colors={textBaseColor} tagClicked={(tag) => navigateToTrend(tag)}>
           <Description>{description}</Description>
         </ReactTagify>
 
@@ -73,15 +62,11 @@ export default function SinglePost({
             <MetaLink>{metadata.url}</MetaLink>
           </TextArea>
           <ImageContainer>
-            <img src={metadata.image} alt="linkImage" />
+            <img src={metadata.image} alt='linkImage' />
           </ImageContainer>
         </Snippet>
       </Right>
-      <Modal
-        setModalIsOpen={setModalIsOpen}
-        modalIsOpen={modalIsOpen}
-        posts_id={posts_id}
-      />
+      <Modal setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} posts_id={posts_id} />
     </PostContainer>
   );
 }
@@ -95,6 +80,7 @@ const TextArea = styled.div`
 `;
 const PostContainer = styled.div`
   width: 100%;
+  max-width: 100vw;
   height: 232px;
   background: #171717;
   display: flex;
@@ -124,7 +110,7 @@ const Right = styled.div`
 `;
 
 const Name = styled.h1`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 17px;
@@ -132,12 +118,14 @@ const Name = styled.h1`
 `;
 
 const Description = styled.h2`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 15px;
   color: #b7b7b7;
   line-height: 20px;
+  max-width: 100vw;
+  word-break: break-all;
 `;
 
 const Snippet = styled.div`
@@ -165,16 +153,16 @@ const Snippet = styled.div`
     height: 155px;
     border: 1px solid #4d4d4d;
     border-radius: 11px;
-    ${TextArea}{
+    ${TextArea} {
       padding: 24px 10px 20px 24px;
     }
-    h1{
+    h1 {
       font-size: 16px;
     }
-    h2{
+    h2 {
       font-size: 11px;
     }
-    h3{
+    h3 {
       font-size: 11px;
     }
     img {
@@ -187,16 +175,16 @@ const Snippet = styled.div`
 `;
 
 const MetaTitle = styled.h1`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 11px;
   color: #cecece;
   margin-bottom: 5px;
-`
+`;
 
 const MetaDescription = styled.h2`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 9px;
@@ -208,7 +196,7 @@ const MetaDescription = styled.h2`
 `;
 
 const MetaLink = styled.h3`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 9px;
@@ -225,7 +213,7 @@ const Left = styled.div`
 `;
 
 const Likes = styled.p`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 9px;

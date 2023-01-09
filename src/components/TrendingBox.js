@@ -6,7 +6,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-export default function TrendingBox({ background, color, hide, width, placedAt }) {
+export default function TrendingBox({ background, color, hide, width, placedAt, setIsVisible }) {
   const [hashtags, setHashtags] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -41,8 +41,13 @@ export default function TrendingBox({ background, color, hide, width, placedAt }
         ) : (
           hashtags.map((hashtag) => {
             return (
-              <li key={hashtag.hashtag_id} onClick={() => navigate(`/hashtag/${hashtag.name}`)}>
-                # {hashtag.name}
+              <li
+                key={hashtag.hashtag_id}
+                onClick={() => {
+                  setIsVisible(false);
+                  navigate(`/hashtag/${hashtag.name}`);
+                }}>
+                <p># {hashtag.name}</p>
               </li>
             );
           })
@@ -56,7 +61,6 @@ const TrendingContainer = styled.div`
   display: ${(props) => (props.placedAt === 'SearchBar' || props.hide === 'true' ? 'none' : 'flex')};
   flex-direction: column;
   width: ${(props) => props.width};
-  min-width: fit-content;
   max-width: 300px;
   margin: 0 auto;
   border-radius: 0.5rem;
@@ -76,19 +80,23 @@ const TrendingContainer = styled.div`
 `;
 
 const TrendingList = styled.ul`
-  padding: 1rem;
+  max-width: 100%;
   min-height: 15rem;
+  padding: 1rem;
   div {
-    height: 15rem;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    height: 15rem;
   }
   li {
+    max-width: 100%;
     line-height: 1.6rem;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis ellipsis;
     cursor: pointer;
+    p {
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 `;

@@ -63,6 +63,7 @@ export default function Timeline() {
               hide='false'
               width='20vw'
               placedAt='TimelinePage'
+              setIsVisible={() => console.log('')}
             />
           </RightBox>
         </Container>
@@ -87,6 +88,7 @@ export default function Timeline() {
               hide='false'
               width='20vw'
               placedAt='TimelinePage'
+              setIsVisible={() => console.log('')}
             />
           </RightBox>
         </Container>
@@ -123,6 +125,7 @@ export default function Timeline() {
               hide='false'
               width='20vw'
               placedAt='TimelinePage'
+              setIsVisible={() => console.log('')}
             />
           </RightBox>
         </Container>
@@ -132,8 +135,9 @@ export default function Timeline() {
 }
 
 const Main = styled.main`
-  margin: 0 auto;
   width: fit-content;
+  max-width: 100vw;
+  margin: 0 auto;
   @media (min-width: 660px) {
     display: flex;
     flex-direction: column;
@@ -159,15 +163,16 @@ const RightBox = styled.div`
 `;
 
 const ErrorMessage = styled.p`
-  text-align: center;
-  font-family: 'Oswald', sans-serif;
+  color: ${textBaseColor};
   font-style: italic;
   font-weight: 400;
   font-size: 1.15rem;
-  color: ${textBaseColor};
+  font-family: 'Oswald', sans-serif;
+  text-align: center;
 `;
 
 const Title = styled.h1`
+  max-width: 100vw;
   margin: 1.17rem 0 1.17rem 1rem;
   color: ${textBaseColor};
   font-weight: 700;
