@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import logo from '../../assets/images/linkr.png'
-import description from '../../assets/images/description.png'
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { CustomerContext } from "../../components/context/customer.js";
@@ -49,8 +47,8 @@ export default function SignIn () {
     return(
         <Main>
             <Logo>
-                <Logo1 src={logo} />
-                <Logo2 src={description} />
+            <Logo1>Linkr</Logo1>
+            <Logo2>save, share and discover the best links on the web</Logo2>
             </Logo>
             <LoginPage>
                 <Formulario clicado={clicado} onSubmit={login}>
@@ -109,22 +107,30 @@ a{
             
         }
 `;
-const Logo1 = styled.img`
+const Logo1 = styled.div`
     margin-top: 25%;
+    font-family: 'Passion One';
+    font-size: 103px;
+    font-weight: 700;
     width: 233px;
     height: 65px;
     @media (max-width: 660px){
         margin-top: 0px;
-        width: 160px;
+        width: 210px;
         height: 60px;
+        font-size: 90px;
     }
 `;
-const Logo2 = styled.img`
+const Logo2 = styled.div`
+    font-family: 'Passion One';
     width: 442px;
     height: 100px;
     margin-top: 20px;
+    font-size: 43px;
     @media (max-width: 660px){
-        margin-top: 5px;
+        text-align: center;
+        margin-top: 30px;
+        font-size: 25px;
         width: 230px;
         height: 70px;
     }
