@@ -1,51 +1,164 @@
-import { IoHeartOutline, IoTrashSharp } from 'react-icons/io5';
-import { useEffect, useState } from 'react';
-
+import { IoHeartOutline, IoTrashSharp, IoHeart } from 'react-icons/io5';
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import Modal from './Modal/Modal';
 import { ReactTagify } from 'react-tagify';
-import axios from 'axios';
 import styled from 'styled-components';
-import swal from 'sweetalert';
 import { textBaseColor } from '../constants/colors';
 import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
+import swal from 'sweetalert';
+import { CustomerContext } from './context/customer';
 
-export default function SinglePost({ link, description, image, name, posts_id, refreshPage, setRefreshPage }) {
+export default function SinglePost({
+  postOwner_id,
+  link,
+  description,
+  image,
+  name,
+  posts_id,
+  refreshPage,
+  setRefreshPage,
+}) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [metadata, setMetadata] = useState({});
+  const [likes, setLikes] = useState(0);
+  const { token, userId, setToken, setUserImage, setUserId } = useContext(CustomerContext);
+  const [usersWhoLiked, setUsersWhoLiked] = useState([]);
+  const [usersWhoLikedWithoutMe, setUsersWhoLikedWithoutMe] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/metadata`)
-      .then((res) => {
-        setMetadata(res.data);
-      })
-      .catch((err) => {
+    setToken(localStorage.getItem('token'));
+    setUserId(localStorage.getItem('user_id'));
+    const tempUserId = localStorage.getItem('user_id');
+    setUserImage(localStorage.getItem('user_image'));
+    const fetchData = async () => {
+      try {
+        const response1 = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/metadata`);
+        const response2 = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/like`);
+        setMetadata(response1.data);
+        setLikes(response2.data.likeCount);
+        setUsersWhoLiked(response2.data.users);
+        let { users } = response2.data;
+        const userArr = [];
+        for (let i = 0; i < users.length; i++) {
+          if (parseInt(users[i].user_id) !== +tempUserId) {
+            userArr.push(users[i]);
+          }
+        }
+        setUsersWhoLikedWithoutMe(userArr);
+      } catch (err) {
         swal({
           title: `Houve um erro ao carregar metadata do post ${posts_id}!`,
           icon: 'error',
         });
-        console.log(err.response.data.errors);
-      });
-  }, [posts_id]);
+        console.log(err.response.data);
+      }
+    };
+    fetchData();
+  }, [refreshPage]);
 
-  const navigate = useNavigate();
+  function likePost() {
+    const config = {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    };
+    axios
+      .post(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/like`, {}, config)
+      .then((res) => {
+        setRefreshPage(!refreshPage);
+      })
+      .catch((err) => {
+        swal({
+          title: `Houve um erro ao dar like no post ${posts_id}!`,
+          icon: 'error',
+        });
+        console.log(err.response.data);
+      });
+  }
+
+  function dislikePost() {
+    const config = {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    };
+    axios
+      .delete(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/like`, config)
+      .then((res) => {
+        setRefreshPage(!refreshPage);
+      })
+      .catch((err) => {
+        swal({
+          title: `Houve um erro ao dar dislike no post ${posts_id}!`,
+          icon: 'error',
+        });
+        console.log(err.response.data);
+      });
+  }
+
+  function navigateToUserPage(postOwnerId) {
+    navigate(`/user/${postOwnerId}`);
+  }
+
   function navigateToTrend(str) {
     const newStr = str.replace('#', '');
     setRefreshPage(!refreshPage);
     navigate(`/hashtag/${newStr}`);
   }
 
+  function thisUserLikedThisPost() {
+    for (let i = 0; i < usersWhoLiked.length; i++) {
+      if (usersWhoLiked[i].user_id === +userId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   return (
     <PostContainer>
       <Left>
-        <img src={image} alt='userImage' />
-        <IoHeartOutline style={{ marginBottom: '12px', cursor: 'pointer' }} />
-        <Likes>13 likes</Likes>
+        <img
+          onClick={() => navigateToUserPage(postOwner_id)}
+          src={image}
+          alt='userImage'
+          style={{ cursor: 'pointer' }}
+        />
+        {thisUserLikedThisPost() ? (
+          <>
+            <IoHeart
+              id={`${posts_id}Liked`}
+              onClick={dislikePost}
+              style={{ marginBottom: '12px', cursor: 'pointer', color: 'red' }}
+            />
+            {likes === 1 ? (
+              <Tooltip anchorId={`${posts_id}Liked`} content={`Apenas você curtiu esse post`} place='bottom' />
+            ) : (
+              <Tooltip
+                anchorId={`${posts_id}Liked`}
+                content={`Você, ${usersWhoLikedWithoutMe[0]?.name}`}
+                place='bottom'
+              />
+            )}
+          </>
+        ) : (
+          <>
+            <IoHeartOutline id={posts_id} onClick={likePost} style={{ marginBottom: '12px', cursor: 'pointer' }} />
+            <Tooltip anchorId={posts_id} content='AINDA NÃO CURTI' place='bottom' />
+          </>
+        )}
+        <Likes>{likes}</Likes>
       </Left>
       <Right>
         <Title>
-          <Name>{name}</Name>
+          <Name style={{ cursor: 'pointer' }} onClick={() => navigateToUserPage(postOwner_id)}>
+            {name}
+          </Name>
           <div>
             <MdOutlineModeEditOutline />
             <IoTrashSharp onClick={() => setModalIsOpen(true)} />
