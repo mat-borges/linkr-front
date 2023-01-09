@@ -32,7 +32,7 @@ export default function SignUp () {
             return
         }
 
-        const URL = "http://localhost:4000/signup";
+        const URL = `${process.env.REACT_APP_API_BASE_URL}/signin`;
 
         const body = {
             name,
