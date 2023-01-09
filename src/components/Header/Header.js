@@ -1,5 +1,5 @@
 import { accentColor, detailColor, textBaseColor } from '../../constants/colors.js';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { CustomerContext } from '../context/customer.js';
 import { IoIosArrowDown } from 'react-icons/io';
@@ -7,12 +7,23 @@ import SearchBar from './SearchBar.js';
 import axios from 'axios';
 import logo from '../../assets/images/logo.png';
 import styled from 'styled-components';
+import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
   const navigate = useNavigate();
   const [sideMenu, setSideMenu] = useState(false);
-  const { token, setToken } = useContext(CustomerContext);
+  const { token, setToken, setUserImage, setUserId } = useContext(CustomerContext);
+
+  useEffect(() => {
+    if (!localStorage.token) {
+      swal('Usuário não logado!', 'Faça o login novamente para acessar suas informações.', 'error');
+      navigate('/');
+    }
+    setToken(localStorage.token);
+    setUserId(localStorage.user_id);
+    setUserImage(localStorage.user_image);
+  }, [navigate, setUserImage, setUserId, setToken]);
 
   function logOut(e) {
     e.preventDefault();

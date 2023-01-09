@@ -22,7 +22,7 @@ export default function Timeline() {
   useEffect(() => {
     setLoadingPage(true);
 
-    if (!localStorage.getItem('token')) {
+    if (!localStorage.token) {
       swal('Usuário não logado!', 'Faça o login novamente para acessar suas informações.', 'error');
       setLoadingPage(false);
       navigate('/');
