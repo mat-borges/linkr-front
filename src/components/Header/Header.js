@@ -14,7 +14,7 @@ export default function Header() {
   const [sideMenu, setSideMenu] = useState(false);
   const {token, setToken} = useContext(CustomerContext);
 
-  function logUot(e) {
+  function logOut(e) {
     e.preventDefault();
 
     const URL = `${process.env.REACT_APP_API_BASE_URL}/logout`;
@@ -43,7 +43,7 @@ export default function Header() {
         <MenuIcon clicked={sideMenu ? 'true' : 'false'} size={'0.7em'} />
         <img src={logo} alt='userAvatar' />
         <SideMenu display={sideMenu ? 'true' : 'false'}>
-          <li onClick={logUot}>LogOut</li>
+          <li onClick={logOut}>LogOut</li>
         </SideMenu>
       </RightBox>
     </HeaderContainer>
