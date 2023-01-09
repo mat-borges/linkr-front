@@ -11,13 +11,14 @@ export default function Preview({ results, searchFocus, isVisible, setIsVisible,
   const ulRef = useRef(null);
   const minLength = 3;
 
-  function handleClick(name) {
+  function handleClick(result) {
     let path = '';
-    if (name.includes('#')) {
-      const hashtag = name.replace('#', '');
+    if (result.name.includes('#')) {
+      const hashtag = result.name.replace('#', '');
       path = `/hashtag/${hashtag}`;
     } else {
-      path = `/user/${name}`;
+      const id = result.user_id;
+      path = `/user/${id}`;
     }
     navigate(path);
   }
@@ -51,7 +52,7 @@ export default function Preview({ results, searchFocus, isVisible, setIsVisible,
       </li>
       {results?.map((result, index) => {
         return (
-          <li key={index} onClick={() => handleClick(result.name)}>
+          <li key={index} onClick={() => handleClick(result)}>
             {result.image ? <img src={result.image} alt='mock' /> : <></>}
             <p>{result.name}</p>
           </li>
