@@ -21,23 +21,32 @@ export default function SinglePost({
 }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [metadata, setMetadata] = useState({});
+  const [likes, setLikes] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/metadata`)
-      .then((res) => {
-        setMetadata(res.data);
-      })
-      .catch((err) => {
+    const fetchData = async () => {
+      try {
+        const response1 = await axios.get(
+          `${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/metadata`
+        );
+        const response2 = await axios.get(
+          `${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/like`
+        );
+        setMetadata(response1.data)
+        setLikes(response2.data.likes)
+      } catch (error) {
         swal({
           title: `Houve um erro ao carregar metadata do post ${posts_id}!`,
           icon: "error",
         });
-        console.log(err.response.data.errors);
-      });
+        console.log(error.response.data);
+      }
+    };
+    fetchData();
   }, []);
 
-  const navigate = useNavigate();
+
   function navigateToTrend(str) {
     const newStr = str.replace("#", "");
     setRefreshPage(!refreshPage);
@@ -49,7 +58,7 @@ export default function SinglePost({
       <Left>
         <img src={image} alt="userImage" />
         <IoHeartOutline style={{ marginBottom: "12px", cursor: "pointer" }} />
-        <Likes>13 likes</Likes>
+        <Likes>{likes}</Likes>
       </Left>
       <Right>
         <Title>
@@ -165,16 +174,16 @@ const Snippet = styled.div`
     height: 155px;
     border: 1px solid #4d4d4d;
     border-radius: 11px;
-    ${TextArea}{
+    ${TextArea} {
       padding: 24px 10px 20px 24px;
     }
-    h1{
+    h1 {
       font-size: 16px;
     }
-    h2{
+    h2 {
       font-size: 11px;
     }
-    h3{
+    h3 {
       font-size: 11px;
     }
     img {
@@ -193,7 +202,7 @@ const MetaTitle = styled.h1`
   font-size: 11px;
   color: #cecece;
   margin-bottom: 5px;
-`
+`;
 
 const MetaDescription = styled.h2`
   font-family: "Lato";
