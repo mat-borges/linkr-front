@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import SinglePost from '../components/SinglePost';
-import Swal from 'sweetalert2';
+import SinglePost from '../../components/SinglePost';
+import swal from 'sweetalert';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -26,7 +26,7 @@ export default function Hashtag() {
         setLoadingPage(false);
         setError(true);
         if (err.response.status === 404) {
-          Swal('ERROR 404', 'Não há posts nessa trend.', 'info');
+          swal('ERROR 404', 'Não há posts nessa trend.', 'info');
         }
       });
   }, [refreshPage, hashtag]);
@@ -73,6 +73,7 @@ export default function Hashtag() {
             posts.map((p) => (
               <SinglePost
                 key={p.posts_id}
+                posts_id={p.posts_id}
                 link={p.link}
                 description={p.description}
                 name={p.name}

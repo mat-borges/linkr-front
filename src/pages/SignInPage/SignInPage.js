@@ -25,7 +25,7 @@ export default function SignIn () {
         }
         setClicado(!clicado);
 
-        const URL = "http://localhost:4000/signin";
+        const URL = `${process.env.REACT_APP_API_BASE_URL}/signin`;
 
         const body = {
             email,
