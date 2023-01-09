@@ -1,15 +1,39 @@
 import { accentColor, detailColor, textBaseColor } from '../../constants/colors.js';
+import { useContext, useState } from 'react';
 
+import { CustomerContext } from '../context/customer.js';
 import { IoIosArrowDown } from 'react-icons/io';
 import SearchBar from './SearchBar.js';
+import axios from 'axios';
 import logo from '../../assets/images/logo.png';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 
 export default function Header() {
   const navigate = useNavigate();
   const [sideMenu, setSideMenu] = useState(false);
+  const { token, setToken } = useContext(CustomerContext);
+
+  function logOut(e) {
+    e.preventDefault();
+
+    const URL = `${process.env.REACT_APP_API_BASE_URL}`;
+
+    const body = {
+      token: token,
+    };
+
+    console.log(token);
+    axios
+      .post(URL, body)
+      .then(() => {
+        navigate('/');
+        localStorage.removeItem('token');
+        setToken('');
+        console.log('logOut efetuado com sucesso!');
+      })
+      .catch((err) => console.log(err.response));
+  }
 
   return (
     <HeaderContainer>
@@ -19,7 +43,13 @@ export default function Header() {
         <MenuIcon clicked={sideMenu ? 'true' : 'false'} size={'0.7em'} />
         <img src={logo} alt='userAvatar' />
         <SideMenu display={sideMenu ? 'true' : 'false'}>
-          <li onClick={() => setSideMenu(!sideMenu)}>LogOut</li>
+          <li
+            onClick={() => {
+              setSideMenu(!sideMenu);
+              logOut();
+            }}>
+            LogOut
+          </li>
         </SideMenu>
       </RightBox>
     </HeaderContainer>

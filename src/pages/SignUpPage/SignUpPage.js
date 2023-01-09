@@ -1,9 +1,57 @@
-import { Link } from 'react-router-dom';
-import description from '../../assets/images/description.png';
-import logo from '../../assets/images/linkr.png';
+import { Link, useNavigate } from 'react-router-dom';
+
+import axios from 'axios';
+import description from '../assets/images/description.png';
+import logo from '../assets/images/linkr.png';
 import styled from 'styled-components';
+import { useState } from 'react';
 
 export default function SignUp() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [password_confirmation, setPassword_confirmation] = useState('');
+  const [image, setImage] = useState('');
+  const [clicado, setClicado] = useState(false);
+
+  const navigate = useNavigate();
+
+  function registration(e) {
+    e.preventDefault();
+
+    if (clicado) {
+      return;
+    }
+
+    setClicado(!clicado);
+
+    if (password !== password_confirmation) {
+      alert('Comfirme sua senha corretamente!');
+      return;
+    }
+
+    const URL = 'http://localhost:4000/signup';
+
+    const body = {
+      name,
+      email,
+      password,
+      password_confirmation,
+      image,
+    };
+
+    const promisse = axios.post(URL, body);
+
+    promisse.then((res) => {
+      navigate('/');
+      setClicado(!clicado);
+    });
+    promisse.catch((err) => {
+      console.log(err.response.data);
+      setClicado(!clicado);
+    });
+  }
+
   return (
     <Main>
       <Logo>
@@ -11,12 +59,30 @@ export default function SignUp() {
         <Logo2 src={description} />
       </Logo>
       <LoginPage>
-        <Formulario>
-          <input type='email' placeholder='e-mail' required />
-          <input type='password' placeholder='password' required />
-          <input type='password' placeholder='password comfirm' required />
-          <input type='text' placeholder='username' required />
-          <input type='text' placeholder='picture url' required />
+        <Formulario clicado={clicado} onSubmit={registration}>
+          <input type='email' placeholder='e-mail' value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input
+            type='password'
+            placeholder='password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <input
+            type='password'
+            placeholder='password comfirm'
+            value={password_confirmation}
+            onChange={(e) => setPassword_confirmation(e.target.value)}
+            required
+          />
+          <input type='text' placeholder='username' value={name} onChange={(e) => setName(e.target.value)} required />
+          <input
+            type='text'
+            placeholder='picture url'
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+            required
+          />
           <button type='subimit'>Sign Up</button>
         </Formulario>
         <Link to='/'>Switch back to log in</Link>
@@ -127,6 +193,7 @@ const Formulario = styled.form`
     margin: 7px auto 15px;
     border: none;
     border-radius: 6px;
+    opacity: ${(props) => (props.clicado ? 0.2 : 1)};
     cursor: pointer;
     @media (max-width: 660px) {
       width: 330px;
