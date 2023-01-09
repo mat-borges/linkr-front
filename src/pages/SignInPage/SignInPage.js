@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { CustomerContext } from '../../components/context/customer.js';
 import axios from 'axios';
@@ -14,6 +14,15 @@ export default function SignIn() {
   let key = 'token';
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.token) {
+      setToken(localStorage.token);
+      setUserId(localStorage.user_id);
+      setUserImage(localStorage.user_image);
+      navigate('/timeline');
+    }
+  }, [navigate, setToken, setUserId, setUserImage]);
 
   function login(e) {
     e.preventDefault();
