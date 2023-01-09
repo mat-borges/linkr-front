@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import SinglePost from '../components/SinglePost';
+import SinglePost from '../../components/SinglePost';
 import swal from 'sweetalert';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
