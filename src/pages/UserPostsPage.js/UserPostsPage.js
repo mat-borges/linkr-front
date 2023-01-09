@@ -34,18 +34,16 @@ export default function UserPostPage() {
       },
     };
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/user/${id}`, config)
+      .get(`${process.env.REACT_APP_API_BASE_URL}/timeline/user/${id}`, config)
       .then((res) => {
-        setPosts(res.data);
+        console.log(res.data.posts);
+        setPosts(res.data.posts);
         setUser(res.data.name);
         setLoadingPage(false);
       })
       .catch((err) => {
         setLoadingPage(false);
         setError(true);
-        if (err.response.status === 404) {
-          swal('ERROR 404', 'Não há posts nessa trend.', 'info');
-        }
       });
   }, [refreshPage, navigate, setToken, setUserId, setUserImage, id]);
 
@@ -90,13 +88,13 @@ export default function UserPostPage() {
           {posts !== [] ? (
             posts.map((p) => (
               <SinglePost
-                key={p.posts_id}
+                key={p.id}
                 postOwner_id={p.user_id}
-                posts_id={p.posts_id}
+                posts_id={p.id}
                 link={p.link}
                 description={p.description}
                 name={p.name}
-                image={p.image}
+                image={p.user_image}
                 refreshPage={refreshPage}
                 setRefreshPage={setRefreshPage}
               />
