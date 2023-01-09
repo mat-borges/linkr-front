@@ -28,6 +28,8 @@ export default function Header() {
       .then(() => {
         navigate("/");
         localStorage.removeItem('token');
+        localStorage.removeItem('user_id');
+        localStorage.removeItem('user_image');
         setToken("");
         console.log("logOut efetuado com sucesso!")
       })
