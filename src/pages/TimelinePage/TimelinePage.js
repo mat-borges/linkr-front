@@ -54,7 +54,7 @@ export default function Timeline() {
         <Title>timeline</Title>
         <Container>
           <LeftBox>
-            <PublishPost />
+            <PublishPost refreshPage={refreshPage} setRefreshPage={setRefreshPage} />
             <div className='loading'>
               <ThreeDots
                 height='80'
@@ -91,7 +91,7 @@ export default function Timeline() {
         <Title>timeline</Title>
         <Container>
           <LeftBox>
-            <PublishPost />
+            <PublishPost refreshPage={refreshPage} setRefreshPage={setRefreshPage} />
             <ErrorMessage>
               Ocorreu um erro ao tentar buscar os posts, <br />
               atualize a página
@@ -116,7 +116,7 @@ export default function Timeline() {
         <Title>timeline</Title>
         <Container>
           <LeftBox>
-            <PublishPost />
+            <PublishPost refreshPage={refreshPage} setRefreshPage={setRefreshPage} />
             {posts !== [] ? (
               posts.map((p) => (
                 <SinglePost
