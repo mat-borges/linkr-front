@@ -17,7 +17,7 @@ export default function Header() {
   function logUot(e) {
     e.preventDefault();
 
-    const URL = "http://localhost:4000/logout";
+    const URL = `${process.env.REACT_APP_API_BASE_URL}/logout`;
 
     const body = {
       token: token
