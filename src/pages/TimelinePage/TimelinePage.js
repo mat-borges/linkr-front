@@ -124,8 +124,11 @@ export default function Timeline() {
                   postOwner_id={p.user_id}
                   link={p.link}
                   description={p.description}
-                  name={p.name}
+                  md_description={p.md_description}
+                  md_title={p.md_title}
+                  md_image={p.md_image}
                   image={p.image}
+                  name={p.name}
                   posts_id={p.posts_id}
                   refreshPage={refreshPage}
                   setRefreshPage={setRefreshPage}
