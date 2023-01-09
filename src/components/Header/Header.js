@@ -1,25 +1,51 @@
 import { accentColor, detailColor, textBaseColor } from '../../constants/colors.js';
 
 import { IoIosArrowDown } from 'react-icons/io';
+import SearchBar from './SearchBar.js';
 import logo from '../../assets/images/logo.png';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import axios from 'axios';
+import { CustomerContext } from '../context/customer.js';
 
 export default function Header() {
   const navigate = useNavigate();
   const [sideMenu, setSideMenu] = useState(false);
+  const {token, setToken} = useContext(CustomerContext);
+
+  function logUot(e) {
+    e.preventDefault();
+
+    const URL = "http://localhost:4000/logout";
+
+    const body = {
+      token: token
+    };
+
+    console.log(token)
+    axios.post(URL, body)
+      .then(() => {
+        navigate("/");
+        localStorage.removeItem('token');
+        setToken("");
+        console.log("logOut efetuado com sucesso!")
+      })
+      .catch((err) => console.log(err.response))
+
+  }
 
   return (
     <HeaderContainer>
       <h1 onClick={() => navigate('/')}>linkr</h1>
-      <div onClick={() => setSideMenu(!sideMenu)}>
+      <SearchBar />
+      <RightBox onClick={() => setSideMenu(!sideMenu)}>
         <MenuIcon clicked={sideMenu ? 'true' : 'false'} size={'0.7em'} />
         <img src={logo} alt='userAvatar' />
         <SideMenu display={sideMenu ? 'true' : 'false'}>
-          <li onClick={() => setSideMenu(!sideMenu)}>LogOut</li>
+          <li onClick={logUot}>LogOut</li>
         </SideMenu>
-      </div>
+      </RightBox>
     </HeaderContainer>
   );
 }
@@ -37,18 +63,19 @@ const HeaderContainer = styled.div`
     font-family: 'Passion One', cursive;
     cursor: pointer;
   }
-  div {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    img {
-      width: 1em;
-      margin-left: 1rem;
-      border: 2px solid ${textBaseColor};
-      border-radius: 50%;
-      cursor: pointer;
-    }
+`;
+
+const RightBox = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    width: 1em;
+    margin-left: 1rem;
+    border: 2px solid ${textBaseColor};
+    border-radius: 50%;
+    cursor: pointer;
   }
 `;
 

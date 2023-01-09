@@ -1,4 +1,4 @@
-import { accentColor, textBaseColor, textPublishColor } from '../constants/colors';
+import { textBaseColor, textPublishColor } from '../constants/colors';
 import { useEffect, useState } from 'react';
 
 import { TailSpin } from 'react-loader-spinner';
@@ -6,7 +6,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-export default function TrendingBox() {
+export default function TrendingBox({ background, color, hide, width, placedAt }) {
   const [hashtags, setHashtags] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ export default function TrendingBox() {
   }, []);
 
   return (
-    <TrendingContainer>
+    <TrendingContainer background={background} color={color} hide={hide} width={width} placedAt={placedAt}>
       <h1>trending</h1>
       <TrendingList loading={loading.toString()}>
         {loading ? (
@@ -53,24 +53,25 @@ export default function TrendingBox() {
 }
 
 const TrendingContainer = styled.div`
-  display: flex;
+  display: ${(props) => (props.placedAt === 'SearchBar' || props.hide === 'true' ? 'none' : 'flex')};
   flex-direction: column;
-  width: 20vw;
+  width: ${(props) => props.width};
   min-width: fit-content;
   max-width: 300px;
   margin: 0 auto;
   border-radius: 0.5rem;
-  color: ${textBaseColor};
-  background-color: ${accentColor};
+  color: ${(props) => props.color};
+  background-color: ${(props) => props.background};
   h1 {
     padding: 1rem;
     border-bottom: 1px solid ${textPublishColor};
     font-weight: 700;
     font-size: 1.6rem;
     font-family: 'Oswald', sans-serif;
+    cursor: auto;
   }
   @media (max-width: 800px) {
-    display: none;
+    display: ${(props) => (props.placedAt === 'SearchBar' ? 'flex' : 'none')};
   }
 `;
 
@@ -85,6 +86,9 @@ const TrendingList = styled.ul`
   }
   li {
     line-height: 1.6rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis ellipsis;
     cursor: pointer;
   }
 `;
