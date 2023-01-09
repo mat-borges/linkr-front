@@ -7,6 +7,7 @@ import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
 import styled from 'styled-components';
 import swal from 'sweetalert';
+import { textBaseColor } from '../../constants/colors.js';
 
 export default function UserPostPage() {
   const { id } = useParams();
@@ -36,7 +37,6 @@ export default function UserPostPage() {
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/timeline/user/${id}`, config)
       .then((res) => {
-        console.log(res.data.posts);
         setPosts(res.data.posts);
         setUser(res.data.name);
         setLoadingPage(false);
@@ -51,13 +51,13 @@ export default function UserPostPage() {
     return (
       <Main>
         <AreaUtil>
-          <Title>{user}'s posts</Title>
+          <Title></Title>
           <div className='loading'>
             <ThreeDots
               height='80'
               width='80'
               radius='9'
-              color='#4fa94d'
+              color={textBaseColor}
               ariaLabel='three-dots-loading'
               wrapperStyle={{
                 display: 'flex',

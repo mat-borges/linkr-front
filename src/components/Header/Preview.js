@@ -50,6 +50,7 @@ export default function Preview(props) {
         hide={searchInput.length < minLength ? 'false' : 'true'}
         width='100%'
         placedAt={isVisible === true && searchInput.length < minLength ? 'SearchBar' : 'none'}
+        setIsVisible={setIsVisible}
       />
       {results?.map((result, index) => {
         return (
