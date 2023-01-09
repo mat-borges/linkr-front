@@ -5,8 +5,6 @@ export const CustomerContext = createContext();
 
 export const CustomerProvider = ({ children }) => {
   const [token, setToken] = useState('');
-
-  const [token, setToken] = useState('');
   const [userId, setUserId] = useState('');
   const [userImage, setUserImage] = useState('');
 
