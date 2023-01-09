@@ -16,15 +16,15 @@ export default function Header() {
   const { setToken, setUserImage, setUserId } = useContext(CustomerContext);
 
   useEffect(() => {
-    if (!localStorage.token) {
+    if (!localStorage.token && location.pathname !== '/signup' && location.pathname !== '/') {
       swal('Usuário não logado!', 'Faça o login novamente para acessar suas informações.', 'error');
       navigate('/');
-    } else {
+    } else if (location.pathname !== '/signup' && location.pathname !== '/') {
       setToken(localStorage.token);
       setUserId(localStorage.user_id);
       setUserImage(localStorage.user_image);
     }
-  }, [navigate, setUserImage, setUserId, setToken]);
+  }, [navigate, setUserImage, setUserId, setToken, location.pathname]);
 
   function logOut(e) {
     e.preventDefault();
@@ -56,7 +56,7 @@ export default function Header() {
 
   return (
     <HeaderContainer display={location.pathname === '/' || location.pathname === '/signup' ? 'none' : 'flex'}>
-      <h1 onClick={() => navigate('/')}>linkr</h1>
+      <h1 onClick={() => navigate('/timeline')}>linkr</h1>
       <SearchBar />
       <RightBox onClick={() => setSideMenu(!sideMenu)}>
         <MenuIcon clicked={sideMenu ? 'true' : 'false'} size={'0.7em'} />
