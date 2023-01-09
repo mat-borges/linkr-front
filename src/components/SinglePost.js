@@ -29,6 +29,10 @@ export default function SinglePost({
   const [usersWhoLiked, setUsersWhoLiked] = useState([]);
   const [usersWhoLikedWithoutMe, setUsersWhoLikedWithoutMe] = useState([]);
   const navigate = useNavigate();
+  const [disabled, setDisabled] = useState(false);
+  const [revealInput, setRevealInput] = useState(false)
+  const [body, setBody] = useState({ description: description, link: link })
+
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
@@ -119,6 +123,32 @@ export default function SinglePost({
     }
     return false;
   }
+  function handleChange(e) {
+    setBody({ ...body, [e.target.name]: e.target.value })
+  }
+
+  function keyUp(e) {
+    const config = {headers: {Authorization: `Bearer ${token}`}}
+    if (e.key === 'Escape') {
+      setRevealInput(false)
+    }
+    if (e.key === 'Enter') {
+      setDisabled(true)
+      axios.put(`${process.env.REACT_APP_API_BASE_URL}/timeline/${posts_id}`, body, config)
+        .then((res) => {
+          setRevealInput(false)
+          setRefreshPage(!refreshPage)
+          setDisabled(false)
+        })
+        .catch(() => {
+          swal({
+            title: `Houve um erro ao atualizar o post!`,
+            icon: "error",
+          });
+          setDisabled(false)
+        })
+    }
+  }
 
   return (
     <PostContainer>
@@ -160,14 +190,24 @@ export default function SinglePost({
             {name}
           </Name>
           <div>
-            <MdOutlineModeEditOutline />
-            <IoTrashSharp onClick={() => setModalIsOpen(true)} />
+            <MdOutlineModeEditOutline style={{ display: `${postOwner_id == userId ? 'flex' : 'none'}` }} onClick={() => setRevealInput(!revealInput)} />
+            <IoTrashSharp style={{ display: `${postOwner_id == userId ? 'flex' : 'none'}` }} onClick={() => setModalIsOpen(true)} />
           </div>
         </Title>
-        <ReactTagify colors={textBaseColor} tagClicked={(tag) => navigateToTrend(tag)}>
-          <Description>{description}</Description>
-        </ReactTagify>
-
+        {revealInput ?
+          <input
+            disabled={disabled ? 'disabled' : ''}
+            onChange={handleChange}
+            onKeyUp={keyUp}
+            value={body.description}
+            name='description'
+            autoFocus
+          />
+          :
+          <ReactTagify colors={textBaseColor} tagClicked={(tag) => navigateToTrend(tag)}>
+            <Description>{description}</Description>
+          </ReactTagify>
+        }
         <Snippet onClick={() => window.open(link)}>
           <TextArea>
             <MetaTitle>{metadata.title}</MetaTitle>
@@ -179,7 +219,7 @@ export default function SinglePost({
           </ImageContainer>
         </Snippet>
       </Right>
-      <Modal setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} posts_id={posts_id} />
+      <Modal token={token} setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} posts_id={posts_id} setRefreshPage={setRefreshPage} refreshPage={refreshPage}/>
     </PostContainer>
   );
 }

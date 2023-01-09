@@ -26,7 +26,7 @@ export default function PublishPost() {
     const body = form;
     const config = {
       headers: {
-        authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJuYW1lIjoiTWF0ZXVzIEJvcmdlcyIsImltYWdlIjoiaHR0cHM6Ly9wYnMudHdpbWcuY29tL21lZGlhL0ZBQzJ2OU9Wa0FBSXZkMi5qcGciLCJpYXQiOjE2NzMwMjIyNTl9.w_1r8epDviaonmNIlV3xVTToWYR0SHvX45TKm4ib9xs`,
+        authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJuYW1lIjoiZ2FiaSIsImltYWdlIjoiaHR0cDovL29pLmNvbSIsImlhdCI6MTY3MzI3Mzk2NX0.cg8yLi52QkdLvocQmqC94_PiArze12wFGiHEPDQ0mAQ`,
       },
     };
     setPublishing(true);
