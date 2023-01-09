@@ -1,13 +1,13 @@
 import { accentColor, detailColor, textBaseColor } from '../../constants/colors.js';
+import { useContext, useState } from 'react';
 
+import { CustomerContext } from '../context/customer.js';
 import { IoIosArrowDown } from 'react-icons/io';
 import SearchBar from './SearchBar.js';
+import axios from 'axios';
 import logo from '../../assets/images/logo.png';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useState, useContext } from 'react';
-import axios from 'axios';
-import { CustomerContext } from '../context/customer.js';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -19,17 +19,18 @@ export default function Header() {
 
     const URL = `${process.env.REACT_APP_API_BASE_URL}/logout`;
 
-    const body = {token};
+    const body = { token };
 
-    axios.post(URL, body)
+    axios
+      .post(URL, body)
       .then(() => {
-        navigate("/");
+        navigate('/');
         localStorage.removeItem('token');
         localStorage.removeItem('user_id');
         localStorage.removeItem('user_image');
-        setToken("");
+        setToken('');
       })
-      .catch((err) => console.log(err.response))
+      .catch((err) => console.log(err.response));
   }
 
   return (
