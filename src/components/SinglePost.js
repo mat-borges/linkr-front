@@ -1,25 +1,45 @@
-import { IoHeartOutline, IoTrashSharp } from 'react-icons/io5';
+import { IoHeartOutline, IoTrashSharp } from "react-icons/io5";
 
-import { MdOutlineModeEditOutline } from 'react-icons/md';
-import Modal from './Modal/Modal';
-import { ReactTagify } from 'react-tagify';
-import styled from 'styled-components';
-import { textBaseColor } from '../constants/colors';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { MdOutlineModeEditOutline } from "react-icons/md";
+import Modal from "./Modal/Modal";
+import { ReactTagify } from "react-tagify";
+import styled from "styled-components";
+import { textBaseColor } from "../constants/colors";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import swal from "sweetalert";
 
-export default function SinglePost({ link, description, image, name, posts_id, refreshPage, setRefreshPage }) {
+export default function SinglePost({
+  link,
+  description,
+  image,
+  name,
+  posts_id,
+  refreshPage,
+  setRefreshPage,
+}) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  /* const [metadata, setMetadata] = useState({})
-    useEffect(() => {
-        urlMetaData("").then((res) => {
-            setMetadata(res)
-        })
-    }, [metadata]) */
+  const [metadata, setMetadata] = useState({});
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/metadata`)
+      .then((res) => {
+        setMetadata(res.data);
+      })
+      .catch((err) => {
+        swal({
+          title: `Houve um erro ao carregar metadata do post ${posts_id}!`,
+          icon: "error",
+        });
+        console.log(err.response.data.errors);
+      });
+  }, []);
 
   const navigate = useNavigate();
   function navigateToTrend(str) {
-    const newStr = str.replace('#', '');
+    const newStr = str.replace("#", "");
     setRefreshPage(!refreshPage);
     navigate(`/hashtag/${newStr}`);
   }
@@ -27,8 +47,8 @@ export default function SinglePost({ link, description, image, name, posts_id, r
   return (
     <PostContainer>
       <Left>
-        <img src={image} alt='userImage' />
-        <IoHeartOutline style={{ marginBottom: '12px', cursor: 'pointer' }} />
+        <img src={image} alt="userImage" />
+        <IoHeartOutline style={{ marginBottom: "12px", cursor: "pointer" }} />
         <Likes>13 likes</Likes>
       </Left>
       <Right>
@@ -39,27 +59,40 @@ export default function SinglePost({ link, description, image, name, posts_id, r
             <IoTrashSharp onClick={() => setModalIsOpen(true)} />
           </div>
         </Title>
-        <ReactTagify colors={textBaseColor} tagClicked={(tag) => navigateToTrend(tag)}>
+        <ReactTagify
+          colors={textBaseColor}
+          tagClicked={(tag) => navigateToTrend(tag)}
+        >
           <Description>{description}</Description>
         </ReactTagify>
-        <Snippet onClick={() => window.open(link)}>
-          <div>
-            <MetaTitle>Como aplicar o Material UI em um projeto React</MetaTitle>
 
-            <MetaDescription>
-              Hey! I have moved this tutorial to my personal blog. Same content, new location. Sorry about making you
-              click through to another page.
-            </MetaDescription>
-            <MetaLink>{link}</MetaLink>
-          </div>
-          <img src='https://i.kym-cdn.com/entries/icons/original/000/016/546/hidethepainharold.jpg' alt='linkImage' />
+        <Snippet onClick={() => window.open(link)}>
+          <TextArea>
+            <MetaTitle>{metadata.title}</MetaTitle>
+            <MetaDescription>{metadata.description}</MetaDescription>
+            <MetaLink>{metadata.url}</MetaLink>
+          </TextArea>
+          <ImageContainer>
+            <img src={metadata.image} alt="linkImage" />
+          </ImageContainer>
         </Snippet>
       </Right>
-      <Modal setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} posts_id={posts_id} />
+      <Modal
+        setModalIsOpen={setModalIsOpen}
+        modalIsOpen={modalIsOpen}
+        posts_id={posts_id}
+      />
     </PostContainer>
   );
 }
 
+const ImageContainer = styled.div`
+  display: flex;
+`;
+const TextArea = styled.div`
+  display: flex;
+  padding: 7px 10px 8px 10px;
+`;
 const PostContainer = styled.div`
   width: 100%;
   height: 232px;
@@ -91,7 +124,7 @@ const Right = styled.div`
 `;
 
 const Name = styled.h1`
-  font-family: 'Lato';
+  font-family: "Lato";
   font-style: normal;
   font-weight: 400;
   font-size: 17px;
@@ -99,7 +132,7 @@ const Name = styled.h1`
 `;
 
 const Description = styled.h2`
-  font-family: 'Lato';
+  font-family: "Lato";
   font-style: normal;
   font-weight: 400;
   font-size: 15px;
@@ -109,11 +142,11 @@ const Description = styled.h2`
 
 const Snippet = styled.div`
   display: flex;
+  justify-content: space-between;
   width: 278px;
   height: 115px;
   border: 1px solid #4d4d4d;
   border-radius: 11px;
-  padding: 7px 0 1px 11px;
   cursor: pointer;
 
   div {
@@ -122,6 +155,7 @@ const Snippet = styled.div`
   }
 
   img {
+    justify-content: flex-end;
     width: 95px;
     height: 115px;
     border-radius: 0px 12px 13px 0px;
@@ -131,32 +165,53 @@ const Snippet = styled.div`
     height: 155px;
     border: 1px solid #4d4d4d;
     border-radius: 11px;
+    ${TextArea}{
+      padding: 24px 10px 20px 24px;
+    }
+    h1{
+      font-size: 16px;
+    }
+    h2{
+      font-size: 11px;
+    }
+    h3{
+      font-size: 11px;
+    }
+    img {
+      justify-content: flex-end;
+      width: 154px;
+      height: 155px;
+      border-radius: 0px 12px 13px 0px;
+    }
   }
 `;
 
 const MetaTitle = styled.h1`
-  font-family: 'Lato';
+  font-family: "Lato";
   font-style: normal;
   font-weight: 400;
   font-size: 11px;
   color: #cecece;
-`;
+  margin-bottom: 5px;
+`
 
 const MetaDescription = styled.h2`
-  font-family: 'Lato';
+  font-family: "Lato";
   font-style: normal;
   font-weight: 400;
   font-size: 9px;
   color: #9b9595;
   display: flex;
   justify-content: flex-start;
+  overflow: hidden;
+  margin-bottom: 13px;
 `;
 
 const MetaLink = styled.h3`
-  font-family: 'Lato';
+  font-family: "Lato";
   font-style: normal;
   font-weight: 400;
-  font-size: 11px;
+  font-size: 9px;
   color: #cecece;
 `;
 
@@ -170,7 +225,7 @@ const Left = styled.div`
 `;
 
 const Likes = styled.p`
-  font-family: 'Lato';
+  font-family: "Lato";
   font-style: normal;
   font-weight: 400;
   font-size: 9px;
