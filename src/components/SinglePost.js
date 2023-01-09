@@ -13,6 +13,7 @@ import swal from "sweetalert";
 import { CustomerContext } from "./context/customer";
 
 export default function SinglePost({
+  postOwner_id,
   link,
   description,
   image,
@@ -97,7 +98,8 @@ export default function SinglePost({
     };
     axios
       .delete(
-        `${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/like`,config
+        `${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/like`,
+        config
       )
       .then((res) => {
         setRefreshPage(!refreshPage);
@@ -109,6 +111,10 @@ export default function SinglePost({
         });
         console.log(err.response.data);
       });
+  }
+
+  function navigateToUserPage(postOwnerId) {
+    navigate(`/user/${postOwnerId}`);
   }
 
   function navigateToTrend(str) {
@@ -129,7 +135,12 @@ export default function SinglePost({
   return (
     <PostContainer>
       <Left>
-        <img src={image} alt="userImage" />
+        <img
+          onClick={() => navigateToUserPage(postOwner_id)}
+          src={image}
+          alt="userImage"
+          style={{cursor: "pointer"}}
+        />
         {thisUserLikedThisPost() ? (
           <>
             <IoHeart
@@ -169,7 +180,7 @@ export default function SinglePost({
       </Left>
       <Right>
         <Title>
-          <Name>{name}</Name>
+          <Name style={{cursor: "pointer"}} onClick={() => navigateToUserPage(postOwner_id)}>{name}</Name>
           <div>
             <MdOutlineModeEditOutline />
             <IoTrashSharp onClick={() => setModalIsOpen(true)} />
