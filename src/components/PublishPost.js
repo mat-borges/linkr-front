@@ -86,6 +86,7 @@ export default function PublishPost() {
 const PublishContainer = styled.div`
   display: flex;
   width: 100%;
+  max-width: 100vw;
   height: fit-content;
   margin: 0 auto;
   padding: 1.1rem;

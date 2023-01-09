@@ -1,25 +1,41 @@
 import { accentColor, textBaseColor } from '../../constants/colors.js';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
+import { CustomerContext } from '../../components/context/customer.js';
 import PublishPost from '../../components/PublishPost.js';
 import SinglePost from '../../components/SinglePost.js';
 import { ThreeDots } from 'react-loader-spinner';
 import TrendingBox from '../../components/TrendingBox.js';
 import axios from 'axios';
 import styled from 'styled-components';
+import swal from 'sweetalert';
+import { useNavigate } from 'react-router';
 
 export default function Timeline() {
   const [posts, setPosts] = useState();
   const [loadingPage, setLoadingPage] = useState(true);
   const [refreshPage, setRefreshPage] = useState(false);
   const [error, setError] = useState(false);
+  const { setToken, setUserId, setUserImage } = useContext(CustomerContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    setLoadingPage(true);
+
+    if (!localStorage.token) {
+      swal('Usuário não logado!', 'Faça o login novamente para acessar suas informações.', 'error');
+      setLoadingPage(false);
+      navigate('/');
+    }
+    setToken(localStorage.token);
+    setUserId(localStorage.user_id);
+    setUserImage(localStorage.user_image);
     const config = {
       headers: {
-        authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJuYW1lIjoiTWF0ZXVzIEJvcmdlcyIsImltYWdlIjoiaHR0cHM6Ly9wYnMudHdpbWcuY29tL21lZGlhL0ZBQzJ2OU9Wa0FBSXZkMi5qcGciLCJpYXQiOjE2NzMwMjIyNTl9.w_1r8epDviaonmNIlV3xVTToWYR0SHvX45TKm4ib9xs`,
+        authorization: `Bearer ${localStorage.token}`,
       },
     };
+
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/timeline`, config)
       .then((res) => {
@@ -30,7 +46,7 @@ export default function Timeline() {
         setLoadingPage(false);
         setError(true);
       });
-  }, [refreshPage]);
+  }, [refreshPage, navigate, setToken, setUserId, setUserImage]);
 
   if (loadingPage === true) {
     return (
@@ -63,6 +79,7 @@ export default function Timeline() {
               hide='false'
               width='20vw'
               placedAt='TimelinePage'
+              setIsVisible={() => console.log('')}
             />
           </RightBox>
         </Container>
@@ -87,6 +104,7 @@ export default function Timeline() {
               hide='false'
               width='20vw'
               placedAt='TimelinePage'
+              setIsVisible={() => console.log('')}
             />
           </RightBox>
         </Container>
@@ -124,6 +142,7 @@ export default function Timeline() {
               hide='false'
               width='20vw'
               placedAt='TimelinePage'
+              setIsVisible={() => console.log('')}
             />
           </RightBox>
         </Container>
@@ -133,8 +152,9 @@ export default function Timeline() {
 }
 
 const Main = styled.main`
-  margin: 0 auto;
   width: fit-content;
+  max-width: 100vw;
+  margin: 0 auto;
   @media (min-width: 660px) {
     display: flex;
     flex-direction: column;
@@ -160,15 +180,16 @@ const RightBox = styled.div`
 `;
 
 const ErrorMessage = styled.p`
-  text-align: center;
-  font-family: 'Oswald', sans-serif;
+  color: ${textBaseColor};
   font-style: italic;
   font-weight: 400;
   font-size: 1.15rem;
-  color: ${textBaseColor};
+  font-family: 'Oswald', sans-serif;
+  text-align: center;
 `;
 
 const Title = styled.h1`
+  max-width: 100vw;
   margin: 1.17rem 0 1.17rem 1rem;
   color: ${textBaseColor};
   font-weight: 700;

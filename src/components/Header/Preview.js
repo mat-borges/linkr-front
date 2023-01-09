@@ -11,13 +11,14 @@ export default function Preview({ results, searchFocus, isVisible, setIsVisible,
   const ulRef = useRef(null);
   const minLength = 3;
 
-  function handleClick(name) {
+  function handleClick(result) {
     let path = '';
-    if (name.includes('#')) {
-      const hashtag = name.replace('#', '');
+    if (result.name.includes('#')) {
+      const hashtag = result.name.replace('#', '');
       path = `/hashtag/${hashtag}`;
     } else {
-      path = `/user/${name}`;
+      const id = result.user_id;
+      path = `/user/${id}`;
     }
     navigate(path);
   }
@@ -40,18 +41,16 @@ export default function Preview({ results, searchFocus, isVisible, setIsVisible,
       show={results.length === 0 ? 'flex' : 'none'}
       ref={ulRef}>
       <h2>{loading ? <MagnifyingGlass color={detailColor} /> : 'Nenhum resultado encontrado'}</h2>
-      <li>
-        <TrendingBox
-          background={publishColor}
-          color={textPublishColor}
-          hide={searchInput.length < minLength ? 'false' : 'true'}
-          width='fit-content'
-          placedAt={searchFocus === true && searchInput.length < minLength ? 'SearchBar' : 'none'}
-        />
-      </li>
+      <TrendingBox
+        background={publishColor}
+        color={textPublishColor}
+        hide={searchInput.length < minLength ? 'false' : 'true'}
+        width='100%'
+        placedAt={isVisible === true && searchInput.length < minLength ? 'SearchBar' : 'none'}
+      />
       {results?.map((result, index) => {
         return (
-          <li key={index} onClick={() => handleClick(result.name)}>
+          <li key={index} onClick={() => handleClick(result)}>
             {result.image ? <img src={result.image} alt='mock' /> : <></>}
             <p>{result.name}</p>
           </li>
@@ -62,21 +61,22 @@ export default function Preview({ results, searchFocus, isVisible, setIsVisible,
 }
 
 const PreviewContainer = styled.ul`
+  display: ${(props) => props.display};
   z-index: 1;
   position: absolute;
   top: 0;
+  flex-direction: column;
+  align-items: flex-start;
   width: 90%;
   height: fit-content;
   min-height: 10rem;
   padding: 3.5rem 1rem 1rem;
   border-radius: 0.7rem;
   background-color: white;
-  display: ${(props) => props.display};
-  flex-direction: column;
-  align-items: flex-start;
   li {
     display: flex;
     align-items: center;
+    max-width: 100%;
     color: ${textPublishColor};
     font-size: 1.1rem;
     cursor: pointer;
@@ -91,14 +91,14 @@ const PreviewContainer = styled.ul`
     }
   }
   h2 {
+    display: ${(props) => props.show};
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 100%;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    display: ${(props) => props.show};
-    font-size: 1rem;
     color: ${textPublishColor};
     font-weight: 700;
+    font-size: 1rem;
+    text-align: center;
   }
 `;

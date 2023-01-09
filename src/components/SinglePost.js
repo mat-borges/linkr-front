@@ -1,16 +1,16 @@
-import { IoHeartOutline, IoTrashSharp, IoHeart } from "react-icons/io5";
-import { Tooltip } from "react-tooltip";
-import "react-tooltip/dist/react-tooltip.css";
-import { MdOutlineModeEditOutline } from "react-icons/md";
-import Modal from "./Modal/Modal";
-import { ReactTagify } from "react-tagify";
-import styled from "styled-components";
-import { textBaseColor } from "../constants/colors";
-import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import swal from "sweetalert";
-import { CustomerContext } from "./context/customer";
+import { IoHeartOutline, IoTrashSharp, IoHeart } from 'react-icons/io5';
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
+import { MdOutlineModeEditOutline } from 'react-icons/md';
+import Modal from './Modal/Modal';
+import { ReactTagify } from 'react-tagify';
+import styled from 'styled-components';
+import { textBaseColor } from '../constants/colors';
+import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
+import swal from 'sweetalert';
+import { CustomerContext } from './context/customer';
 
 export default function SinglePost({
   postOwner_id,
@@ -25,25 +25,20 @@ export default function SinglePost({
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [metadata, setMetadata] = useState({});
   const [likes, setLikes] = useState(0);
-  const { token, userId, setToken, setUserImage, setUserId } =
-    useContext(CustomerContext);
+  const { token, userId, setToken, setUserImage, setUserId } = useContext(CustomerContext);
   const [usersWhoLiked, setUsersWhoLiked] = useState([]);
   const [usersWhoLikedWithoutMe, setUsersWhoLikedWithoutMe] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setToken(localStorage.getItem("token"));
-    setUserId(localStorage.getItem("user_id"));
-    const tempUserId = localStorage.getItem("user_id");
-    setUserImage(localStorage.getItem("user_image"));
+    setToken(localStorage.getItem('token'));
+    setUserId(localStorage.getItem('user_id'));
+    const tempUserId = localStorage.getItem('user_id');
+    setUserImage(localStorage.getItem('user_image'));
     const fetchData = async () => {
       try {
-        const response1 = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/metadata`
-        );
-        const response2 = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/like`
-        );
+        const response1 = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/metadata`);
+        const response2 = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/like`);
         setMetadata(response1.data);
         setLikes(response2.data.likeCount);
         setUsersWhoLiked(response2.data.users);
@@ -58,7 +53,7 @@ export default function SinglePost({
       } catch (err) {
         swal({
           title: `Houve um erro ao carregar metadata do post ${posts_id}!`,
-          icon: "error",
+          icon: 'error',
         });
         console.log(err.response.data);
       }
@@ -73,18 +68,14 @@ export default function SinglePost({
       },
     };
     axios
-      .post(
-        `${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/like`,
-        {},
-        config
-      )
+      .post(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/like`, {}, config)
       .then((res) => {
         setRefreshPage(!refreshPage);
       })
       .catch((err) => {
         swal({
           title: `Houve um erro ao dar like no post ${posts_id}!`,
-          icon: "error",
+          icon: 'error',
         });
         console.log(err.response.data);
       });
@@ -97,17 +88,14 @@ export default function SinglePost({
       },
     };
     axios
-      .delete(
-        `${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/like`,
-        config
-      )
+      .delete(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/like`, config)
       .then((res) => {
         setRefreshPage(!refreshPage);
       })
       .catch((err) => {
         swal({
           title: `Houve um erro ao dar dislike no post ${posts_id}!`,
-          icon: "error",
+          icon: 'error',
         });
         console.log(err.response.data);
       });
@@ -118,7 +106,7 @@ export default function SinglePost({
   }
 
   function navigateToTrend(str) {
-    const newStr = str.replace("#", "");
+    const newStr = str.replace('#', '');
     setRefreshPage(!refreshPage);
     navigate(`/hashtag/${newStr}`);
   }
@@ -138,58 +126,45 @@ export default function SinglePost({
         <img
           onClick={() => navigateToUserPage(postOwner_id)}
           src={image}
-          alt="userImage"
-          style={{cursor: "pointer"}}
+          alt='userImage'
+          style={{ cursor: 'pointer' }}
         />
         {thisUserLikedThisPost() ? (
           <>
             <IoHeart
               id={`${posts_id}Liked`}
               onClick={dislikePost}
-              style={{ marginBottom: "12px", cursor: "pointer", color: "red" }}
+              style={{ marginBottom: '12px', cursor: 'pointer', color: 'red' }}
             />
             {likes === 1 ? (
-              <Tooltip
-                anchorId={`${posts_id}Liked`}
-                content={`Apenas você curtiu esse post`}
-                place="bottom"
-              />
+              <Tooltip anchorId={`${posts_id}Liked`} content={`Apenas você curtiu esse post`} place='bottom' />
             ) : (
               <Tooltip
                 anchorId={`${posts_id}Liked`}
                 content={`Você, ${usersWhoLikedWithoutMe[0]?.name}`}
-                place="bottom"
+                place='bottom'
               />
             )}
           </>
         ) : (
           <>
-            <IoHeartOutline
-              id={posts_id}
-              onClick={likePost}
-              style={{ marginBottom: "12px", cursor: "pointer" }}
-            />
-            <Tooltip
-              anchorId={posts_id}
-              content="AINDA NÃO CURTI"
-              place="bottom"
-            />
+            <IoHeartOutline id={posts_id} onClick={likePost} style={{ marginBottom: '12px', cursor: 'pointer' }} />
+            <Tooltip anchorId={posts_id} content='AINDA NÃO CURTI' place='bottom' />
           </>
         )}
         <Likes>{likes}</Likes>
       </Left>
       <Right>
         <Title>
-          <Name style={{cursor: "pointer"}} onClick={() => navigateToUserPage(postOwner_id)}>{name}</Name>
+          <Name style={{ cursor: 'pointer' }} onClick={() => navigateToUserPage(postOwner_id)}>
+            {name}
+          </Name>
           <div>
             <MdOutlineModeEditOutline />
             <IoTrashSharp onClick={() => setModalIsOpen(true)} />
           </div>
         </Title>
-        <ReactTagify
-          colors={textBaseColor}
-          tagClicked={(tag) => navigateToTrend(tag)}
-        >
+        <ReactTagify colors={textBaseColor} tagClicked={(tag) => navigateToTrend(tag)}>
           <Description>{description}</Description>
         </ReactTagify>
 
@@ -200,15 +175,11 @@ export default function SinglePost({
             <MetaLink>{metadata.url}</MetaLink>
           </TextArea>
           <ImageContainer>
-            <img src={metadata.image} alt="linkImage" />
+            <img src={metadata.image} alt='linkImage' />
           </ImageContainer>
         </Snippet>
       </Right>
-      <Modal
-        setModalIsOpen={setModalIsOpen}
-        modalIsOpen={modalIsOpen}
-        posts_id={posts_id}
-      />
+      <Modal setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} posts_id={posts_id} />
     </PostContainer>
   );
 }
@@ -222,6 +193,7 @@ const TextArea = styled.div`
 `;
 const PostContainer = styled.div`
   width: 100%;
+  max-width: 100vw;
   height: 232px;
   background: #171717;
   display: flex;
@@ -251,7 +223,7 @@ const Right = styled.div`
 `;
 
 const Name = styled.h1`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 17px;
@@ -259,12 +231,14 @@ const Name = styled.h1`
 `;
 
 const Description = styled.h2`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 15px;
   color: #b7b7b7;
   line-height: 20px;
+  max-width: 100vw;
+  word-break: break-all;
 `;
 
 const Snippet = styled.div`
@@ -314,7 +288,7 @@ const Snippet = styled.div`
 `;
 
 const MetaTitle = styled.h1`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 11px;
@@ -323,7 +297,7 @@ const MetaTitle = styled.h1`
 `;
 
 const MetaDescription = styled.h2`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 9px;
@@ -335,7 +309,7 @@ const MetaDescription = styled.h2`
 `;
 
 const MetaLink = styled.h3`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 9px;
@@ -352,7 +326,7 @@ const Left = styled.div`
 `;
 
 const Likes = styled.p`
-  font-family: "Lato";
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   font-size: 9px;
