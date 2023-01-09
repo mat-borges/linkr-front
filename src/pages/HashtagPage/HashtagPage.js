@@ -7,19 +7,18 @@ import axios from "axios";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { CustomerContext } from "../../components/context/customer";
-
 export default function Hashtag() {
   const { hashtag } = useParams();
   const [posts, setPosts] = useState();
   const [loadingPage, setLoadingPage] = useState(true);
   const [error, setError] = useState();
   const [refreshPage, setRefreshPage] = useState(false);
-  const { token } = useContext(CustomerContext);
+  const { token, setToken, userId, setUserId, userImage, setUserImage } =
+    useContext(CustomerContext);
   const navigate = useNavigate();
-  //setToken(localStorage.getItem("token"));
   useEffect(() => {
     setLoadingPage(true);
-    if (!token) {
+    if (!localStorage.getItem("token")) {
       swal(
         "Usuário não logado!",
         "Faça o login novamente para acessar suas informações.",
@@ -27,12 +26,15 @@ export default function Hashtag() {
       );
       navigate("/");
     }
+    setToken(localStorage.getItem("token"));
+    setUserId(localStorage.getItem("user_id"));
+    setUserImage(localStorage.getItem("user_image"));
+    const tempToken = localStorage.getItem("token");
     const config = {
       headers: {
-        authorization: token,
+        authorization: `Bearer ${tempToken}`,
       },
     };
-    console.log(token);
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/hashtag/${hashtag}`, config)
       .then((res) => {
