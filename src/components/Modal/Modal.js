@@ -5,15 +5,17 @@ import ReactModal from "react-modal";
 import styled from "styled-components";
 import Swal from 'sweetalert2'
 
-export default function Modal({setModalIsOpen, modalIsOpen, posts_id}){
+export default function Modal({setModalIsOpen, modalIsOpen, posts_id, setRefreshPage, refreshPage, token}){
     const [deleting, setDeleting] = useState(false)
 
     function deletePost(posts_id) {
+        const config = {headers: {Authorization: `Bearer ${token}`}}
         setDeleting(true)
-        axios.delete(`http://${process.env.REACT_APP_API_BASE_URL}/timeline/${posts_id}`)
+        axios.delete(`${process.env.REACT_APP_API_BASE_URL}/timeline/${posts_id}`, config)
             .then(() => {
                 setModalIsOpen(false)
                 setDeleting(false)
+                setRefreshPage(!refreshPage)
             })
             .catch(() => {
                 setDeleting(false)
