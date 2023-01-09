@@ -8,7 +8,6 @@ import {
 } from '../constants/colors.js';
 
 import axios from 'axios';
-import logo from '../assets/images/logo.png';
 import styled from 'styled-components';
 import swal from 'sweetalert';
 import { useState } from 'react';
@@ -52,7 +51,7 @@ export default function PublishPost({ refreshPage, setRefreshPage }) {
 
   return (
     <PublishContainer publishing={publishing}>
-      <img src={logo} alt='userAvatar' />
+      <img src={localStorage.user_image} alt='userAvatar' />
       <div>
         <h1>What are you going to share today?</h1>
         <form onSubmit={post}>
