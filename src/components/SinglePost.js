@@ -329,7 +329,7 @@ const Likes = styled.p`
   font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
-  font-size: 9px;
+  font-size: 11px;
   text-align: center;
   color: #ffffff;
 `;
