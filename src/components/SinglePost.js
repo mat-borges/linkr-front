@@ -63,7 +63,7 @@ export default function SinglePost({
       }
     };
     fetchData();
-  }, [refreshPage]);
+  }, [refreshPage,setToken,setUserId,setUserImage]);
 
   function likePost() {
     const config = {
@@ -190,8 +190,8 @@ export default function SinglePost({
             {name}
           </Name>
           <div>
-            <MdOutlineModeEditOutline style={{ display: `${postOwner_id == userId ? 'flex' : 'none'}` }} onClick={() => setRevealInput(!revealInput)} />
-            <IoTrashSharp style={{ display: `${postOwner_id == userId ? 'flex' : 'none'}` }} onClick={() => setModalIsOpen(true)} />
+            <MdOutlineModeEditOutline style={{ display: `${postOwner_id === +userId ? 'flex' : 'none'}` }} onClick={() => setRevealInput(!revealInput)} />
+            <IoTrashSharp style={{ display: `${postOwner_id === +userId ? 'flex' : 'none'}` }} onClick={() => setModalIsOpen(true)} />
           </div>
         </Title>
         {revealInput ?

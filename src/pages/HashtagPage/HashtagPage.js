@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import {textBaseColor} from '../../constants/colors.js'
 import { CustomerContext } from '../../components/context/customer.js';
 import SinglePost from '../../components/SinglePost.js';
 import { ThreeDots } from 'react-loader-spinner';
@@ -14,7 +14,7 @@ export default function Hashtag() {
   const [loadingPage, setLoadingPage] = useState(true);
   const [error, setError] = useState();
   const [refreshPage, setRefreshPage] = useState(false);
-  const { token, setToken, userId, setUserId, userImage, setUserImage } = useContext(CustomerContext);
+  const { setToken, setUserId, setUserImage } = useContext(CustomerContext);
   const navigate = useNavigate();
   useEffect(() => {
     setLoadingPage(true);
@@ -44,7 +44,7 @@ export default function Hashtag() {
           swal('ERROR 404', 'Não há posts nessa trend.', 'info');
         }
       });
-  }, [refreshPage, hashtag]);
+  }, [refreshPage, hashtag,refreshPage,setToken,setUserId,setUserImage,navigate]);
 
   if (loadingPage === true) {
     return (
@@ -56,7 +56,7 @@ export default function Hashtag() {
               height='80'
               width='80'
               radius='9'
-              color='#4fa94d'
+              color={textBaseColor}
               ariaLabel='three-dots-loading'
               wrapperStyle={{
                 display: 'flex',
@@ -91,6 +91,9 @@ export default function Hashtag() {
                 postOwner_id={p.user_id}
                 posts_id={p.posts_id}
                 link={p.link}
+                md_description={p.md_description}
+                md_title={p.md_title}
+                md_image={p.md_image}
                 description={p.description}
                 name={p.name}
                 image={p.image}

@@ -93,6 +93,9 @@ export default function UserPostPage() {
                 posts_id={p.id}
                 link={p.link}
                 description={p.description}
+                md_description={p.md_description}
+                md_title={p.md_title}
+                md_image={p.md_image}
                 name={p.name}
                 image={p.user_image}
                 refreshPage={refreshPage}
