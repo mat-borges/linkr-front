@@ -2,11 +2,12 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { CustomerProvider } from './components/context/customer.js';
 import GlobalStyle from './assets/styles/GlobalStyle.js';
-import Hashtag from './pages/Hashtag.js';
+import Hashtag from './pages/HashtagPage/HashtagPage.js';
 import Header from './components/Header/Header.js';
 import SignIn from './pages/SignInPage/SignInPage.js';
 import SignUp from './pages/SignUpPage/SignUpPage.js';
 import Timeline from './pages/TimelinePage/TimelinePage.js';
+import { CustomerProvider } from "./components/context/customer.js";
 
 function App() {
   return (

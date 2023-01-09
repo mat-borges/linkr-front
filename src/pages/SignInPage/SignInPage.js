@@ -1,14 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
-import { CustomerContext } from './context/customer.js';
+import { CustomerContext } from '../../components/context/customer.js';
 import axios from 'axios';
-import description from '../assets/images/description.png';
-import logo from '../assets/images/linkr.png';
 import styled from 'styled-components';
 
 export default function SignIn() {
-  const { setToken } = useContext(CustomerContext);
+  const { setToken, setUserId, setUserImage } = useContext(CustomerContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [clicado, setClicado] = useState(false);
@@ -16,6 +14,15 @@ export default function SignIn() {
   let key = 'token';
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.token) {
+      setToken(localStorage.token);
+      setUserId(localStorage.user_id);
+      setUserImage(localStorage.user_image);
+      navigate('/timeline');
+    }
+  }, [navigate, setToken, setUserId, setUserImage]);
 
   function login(e) {
     e.preventDefault();
@@ -25,7 +32,7 @@ export default function SignIn() {
     }
     setClicado(!clicado);
 
-    const URL = 'http://localhost:4000/signin';
+    const URL = `${process.env.REACT_APP_API_BASE_URL}/signin`;
 
     const body = {
       email,
@@ -36,8 +43,12 @@ export default function SignIn() {
 
     promisse.then((res) => {
       setToken(res.data.token);
+      setUserId(res.data.user_id);
+      setUserImage(res.data.user_image);
       setClicado(!clicado);
       localStorage.setItem(key, res.data.token);
+      localStorage.setItem('user_id', res.data.user_id);
+      localStorage.setItem('user_image', res.data.image);
       navigate('/timeline');
     });
     promisse.catch((err) => {
@@ -49,8 +60,8 @@ export default function SignIn() {
   return (
     <Main>
       <Logo>
-        <Logo1 src={logo} />
-        <Logo2 src={description} />
+        <Logo1>Linkr</Logo1>
+        <Logo2>save, share and discover the best links on the web</Logo2>
       </Logo>
       <LoginPage>
         <Formulario clicado={clicado} onSubmit={login}>
@@ -113,22 +124,30 @@ const LoginPage = styled.div`
     width: 100%;
   }
 `;
-const Logo1 = styled.img`
+const Logo1 = styled.div`
   margin-top: 25%;
+  font-family: 'Passion One';
+  font-size: 103px;
+  font-weight: 700;
   width: 233px;
   height: 65px;
   @media (max-width: 660px) {
     margin-top: 0px;
-    width: 160px;
+    width: 210px;
     height: 60px;
+    font-size: 90px;
   }
 `;
-const Logo2 = styled.img`
+const Logo2 = styled.div`
+  font-family: 'Passion One';
   width: 442px;
   height: 100px;
   margin-top: 20px;
+  font-size: 43px;
   @media (max-width: 660px) {
-    margin-top: 5px;
+    text-align: center;
+    margin-top: 30px;
+    font-size: 25px;
     width: 230px;
     height: 70px;
   }

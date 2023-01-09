@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import SinglePost from '../components/SinglePost';
-import Swal from 'sweetalert2';
+import { CustomerContext } from '../../components/context/customer.js';
+import SinglePost from '../../components/SinglePost.js';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import swal from 'sweetalert';
 
 export default function Hashtag() {
   const { hashtag } = useParams();
@@ -13,11 +14,25 @@ export default function Hashtag() {
   const [loadingPage, setLoadingPage] = useState(true);
   const [error, setError] = useState();
   const [refreshPage, setRefreshPage] = useState(false);
-
+  const { token, setToken, userId, setUserId, userImage, setUserImage } = useContext(CustomerContext);
+  const navigate = useNavigate();
   useEffect(() => {
     setLoadingPage(true);
+    if (!localStorage.getItem('token')) {
+      swal('Usuário não logado!', 'Faça o login novamente para acessar suas informações.', 'error');
+      navigate('/');
+    }
+    setToken(localStorage.getItem('token'));
+    setUserId(localStorage.getItem('user_id'));
+    setUserImage(localStorage.getItem('user_image'));
+    const tempToken = localStorage.getItem('token');
+    const config = {
+      headers: {
+        authorization: `Bearer ${tempToken}`,
+      },
+    };
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/hashtag/${hashtag}`)
+      .get(`${process.env.REACT_APP_API_BASE_URL}/hashtag/${hashtag}`, config)
       .then((res) => {
         setPosts(res.data);
         setLoadingPage(false);
@@ -26,7 +41,7 @@ export default function Hashtag() {
         setLoadingPage(false);
         setError(true);
         if (err.response.status === 404) {
-          Swal('ERROR 404', 'Não há posts nessa trend.', 'info');
+          swal('ERROR 404', 'Não há posts nessa trend.', 'info');
         }
       });
   }, [refreshPage, hashtag]);
@@ -73,6 +88,8 @@ export default function Hashtag() {
             posts.map((p) => (
               <SinglePost
                 key={p.posts_id}
+                postOwner_id={p.user_id}
+                posts_id={p.posts_id}
                 link={p.link}
                 description={p.description}
                 name={p.name}

@@ -1,55 +1,68 @@
 import { accentColor, detailColor, textBaseColor } from '../../constants/colors.js';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { CustomerContext } from '../context/customer.js';
 import { IoIosArrowDown } from 'react-icons/io';
 import SearchBar from './SearchBar.js';
 import axios from 'axios';
-import logo from '../../assets/images/logo.png';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 
 export default function Header() {
+  const location = useLocation();
   const navigate = useNavigate();
   const [sideMenu, setSideMenu] = useState(false);
-  const { token, setToken } = useContext(CustomerContext);
+  const { setToken, setUserImage, setUserId } = useContext(CustomerContext);
+
+  useEffect(() => {
+    if (!localStorage.token) {
+      swal('Usuário não logado!', 'Faça o login novamente para acessar suas informações.', 'error');
+      navigate('/');
+    } else {
+      setToken(localStorage.token);
+      setUserId(localStorage.user_id);
+      setUserImage(localStorage.user_image);
+    }
+  }, [navigate, setUserImage, setUserId, setToken]);
 
   function logOut(e) {
     e.preventDefault();
-
-    const URL = `${process.env.REACT_APP_API_BASE_URL}`;
-
-    const body = {
-      token: token,
+    setSideMenu(false);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.token}`,
+      },
     };
 
-    console.log(token);
-    axios
-      .post(URL, body)
-      .then(() => {
-        navigate('/');
-        localStorage.removeItem('token');
-        setToken('');
-        console.log('logOut efetuado com sucesso!');
-      })
-      .catch((err) => console.log(err.response));
+    swal({ title: 'Tem certeza que deseja deslogar?', icon: 'warning', buttons: [true, true] }).then((res) => {
+      if (res) {
+        axios
+          .post(`${process.env.REACT_APP_API_BASE_URL}/logout`, [], config)
+          .then(() => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('user_image');
+            setToken('');
+            navigate('/');
+          })
+          .catch((err) => {
+            console.log(config);
+            console.log(err.response);
+          });
+      }
+    });
   }
 
   return (
-    <HeaderContainer>
+    <HeaderContainer display={location.pathname === '/' || location.pathname === '/signup' ? 'none' : 'flex'}>
       <h1 onClick={() => navigate('/')}>linkr</h1>
       <SearchBar />
       <RightBox onClick={() => setSideMenu(!sideMenu)}>
         <MenuIcon clicked={sideMenu ? 'true' : 'false'} size={'0.7em'} />
-        <img src={logo} alt='userAvatar' />
+        <img src={localStorage.user_image} alt='userAvatar' />
         <SideMenu display={sideMenu ? 'true' : 'false'}>
-          <li
-            onClick={() => {
-              setSideMenu(!sideMenu);
-              logOut();
-            }}>
-            LogOut
-          </li>
+          <li onClick={logOut}>LogOut</li>
         </SideMenu>
       </RightBox>
     </HeaderContainer>
@@ -57,7 +70,7 @@ export default function Header() {
 }
 
 const HeaderContainer = styled.div`
-  display: flex;
+  display: ${(props) => props.display};
   justify-content: space-between;
   align-items: center;
   width: 100%;
