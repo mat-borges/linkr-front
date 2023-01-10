@@ -1,16 +1,18 @@
-import { IoHeartOutline, IoTrashSharp, IoHeart } from 'react-icons/io5';
-import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
+
+import { IoHeart, IoHeartOutline, IoTrashSharp } from 'react-icons/io5';
+import { accentColor, textAccentColor, textBaseColor } from '../constants/colors';
+import { useContext, useEffect, useState } from 'react';
+
+import { CustomerContext } from './context/customer';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import Modal from './Modal/Modal';
 import { ReactTagify } from 'react-tagify';
-import styled from 'styled-components';
-import { textBaseColor } from '../constants/colors';
-import { useNavigate } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
+import { Tooltip } from 'react-tooltip';
 import axios from 'axios';
+import styled from 'styled-components';
 import swal from 'sweetalert';
-import { CustomerContext } from './context/customer';
+import { useNavigate } from 'react-router-dom';
 
 export default function SinglePost({
   postOwner_id,
@@ -30,9 +32,8 @@ export default function SinglePost({
   const [usersWhoLikedWithoutMe, setUsersWhoLikedWithoutMe] = useState([]);
   const navigate = useNavigate();
   const [disabled, setDisabled] = useState(false);
-  const [revealInput, setRevealInput] = useState(false)
-  const [body, setBody] = useState({ description: description, link: link })
-
+  const [revealInput, setRevealInput] = useState(false);
+  const [body, setBody] = useState({ description: description, link: link });
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
@@ -124,29 +125,30 @@ export default function SinglePost({
     return false;
   }
   function handleChange(e) {
-    setBody({ ...body, [e.target.name]: e.target.value })
+    setBody({ ...body, [e.target.name]: e.target.value });
   }
 
   function keyUp(e) {
-    const config = {headers: {Authorization: `Bearer ${token}`}}
+    const config = { headers: { Authorization: `Bearer ${token}` } };
     if (e.key === 'Escape') {
-      setRevealInput(false)
+      setRevealInput(false);
     }
     if (e.key === 'Enter') {
-      setDisabled(true)
-      axios.put(`${process.env.REACT_APP_API_BASE_URL}/timeline/${posts_id}`, body, config)
+      setDisabled(true);
+      axios
+        .put(`${process.env.REACT_APP_API_BASE_URL}/timeline/${posts_id}`, body, config)
         .then((res) => {
-          setRevealInput(false)
-          setRefreshPage(!refreshPage)
-          setDisabled(false)
+          setRevealInput(false);
+          setRefreshPage(!refreshPage);
+          setDisabled(false);
         })
         .catch(() => {
           swal({
             title: `Houve um erro ao atualizar o post!`,
-            icon: "error",
+            icon: 'error',
           });
-          setDisabled(false)
-        })
+          setDisabled(false);
+        });
     }
   }
 
@@ -190,11 +192,17 @@ export default function SinglePost({
             {name}
           </Name>
           <div>
-            <MdOutlineModeEditOutline style={{ display: `${postOwner_id == userId ? 'flex' : 'none'}` }} onClick={() => setRevealInput(!revealInput)} />
-            <IoTrashSharp style={{ display: `${postOwner_id == userId ? 'flex' : 'none'}` }} onClick={() => setModalIsOpen(true)} />
+            <MdOutlineModeEditOutline
+              style={{ display: `${postOwner_id == userId ? 'flex' : 'none'}` }}
+              onClick={() => setRevealInput(!revealInput)}
+            />
+            <IoTrashSharp
+              style={{ display: `${postOwner_id == userId ? 'flex' : 'none'}` }}
+              onClick={() => setModalIsOpen(true)}
+            />
           </div>
         </Title>
-        {revealInput ?
+        {revealInput ? (
           <input
             disabled={disabled ? 'disabled' : ''}
             onChange={handleChange}
@@ -203,11 +211,11 @@ export default function SinglePost({
             name='description'
             autoFocus
           />
-          :
+        ) : (
           <ReactTagify colors={textBaseColor} tagClicked={(tag) => navigateToTrend(tag)}>
             <Description>{description}</Description>
           </ReactTagify>
-        }
+        )}
         <Snippet onClick={() => window.open(link)}>
           <TextArea>
             <MetaTitle>{metadata.title}</MetaTitle>
@@ -219,7 +227,14 @@ export default function SinglePost({
           </ImageContainer>
         </Snippet>
       </Right>
-      <Modal token={token} setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} posts_id={posts_id} setRefreshPage={setRefreshPage} refreshPage={refreshPage}/>
+      <Modal
+        token={token}
+        setModalIsOpen={setModalIsOpen}
+        modalIsOpen={modalIsOpen}
+        posts_id={posts_id}
+        setRefreshPage={setRefreshPage}
+        refreshPage={refreshPage}
+      />
     </PostContainer>
   );
 }
@@ -227,15 +242,17 @@ export default function SinglePost({
 const ImageContainer = styled.div`
   display: flex;
 `;
+
 const TextArea = styled.div`
   display: flex;
   padding: 7px 10px 8px 10px;
 `;
+
 const PostContainer = styled.div`
   width: 100%;
   max-width: 100vw;
   height: 232px;
-  background: #171717;
+  background: ${accentColor};
   display: flex;
   justify-content: center;
   padding: 10px 18px 15px 15px;
@@ -248,7 +265,7 @@ const PostContainer = styled.div`
   @media (min-width: 660px) {
     width: 611px;
     height: 276px;
-    background: #171717;
+    background: ${accentColor};
     border-radius: 16px;
     justify-content: flex-start;
     padding: 19px 23px 20px 18px;
@@ -267,7 +284,7 @@ const Name = styled.h1`
   font-style: normal;
   font-weight: 400;
   font-size: 17px;
-  color: #ffffff;
+  color: ${textBaseColor};
 `;
 
 const Description = styled.h2`
@@ -275,7 +292,7 @@ const Description = styled.h2`
   font-style: normal;
   font-weight: 400;
   font-size: 15px;
-  color: #b7b7b7;
+  color: ${textAccentColor};
   line-height: 20px;
   max-width: 100vw;
   word-break: break-all;
@@ -371,7 +388,7 @@ const Likes = styled.p`
   font-weight: 400;
   font-size: 11px;
   text-align: center;
-  color: #ffffff;
+  color: ${textBaseColor};
 `;
 
 const Title = styled.div`
