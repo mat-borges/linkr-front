@@ -24,6 +24,7 @@ export default function Header() {
       setUserId(localStorage.user_id);
       setUserImage(localStorage.user_image);
     }
+    setSideMenu(false);
   }, [navigate, setUserImage, setUserId, setToken, location.pathname]);
 
   function logOut(e) {
