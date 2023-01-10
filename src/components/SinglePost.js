@@ -21,11 +21,13 @@ export default function SinglePost({
   image,
   name,
   posts_id,
+  md_description,
+  md_title,
+  md_image,
   refreshPage,
   setRefreshPage,
 }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [metadata, setMetadata] = useState({});
   const [likes, setLikes] = useState(0);
   const { token, userId, setToken, setUserImage, setUserId } = useContext(CustomerContext);
   const [usersWhoLiked, setUsersWhoLiked] = useState([]);
@@ -42,9 +44,7 @@ export default function SinglePost({
     setUserImage(localStorage.getItem('user_image'));
     const fetchData = async () => {
       try {
-        const response1 = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/metadata`);
         const response2 = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/like`);
-        setMetadata(response1.data);
         setLikes(response2.data.likeCount);
         setUsersWhoLiked(response2.data.users);
         let { users } = response2.data;
@@ -64,7 +64,7 @@ export default function SinglePost({
       }
     };
     fetchData();
-  }, [refreshPage]);
+  }, [refreshPage, setToken, setUserId, setUserImage]);
 
   function likePost() {
     const config = {
@@ -181,7 +181,7 @@ export default function SinglePost({
         ) : (
           <>
             <IoHeartOutline id={posts_id} onClick={likePost} style={{ marginBottom: '12px', cursor: 'pointer' }} />
-            <Tooltip anchorId={posts_id} content='AINDA NÃO CURTI' place='bottom' />
+            <Tooltip anchorId={posts_id} content='Curtir!' place='bottom' />
           </>
         )}
         <Likes>{likes}</Likes>
@@ -193,11 +193,11 @@ export default function SinglePost({
           </Name>
           <div>
             <MdOutlineModeEditOutline
-              style={{ display: `${postOwner_id == userId ? 'flex' : 'none'}` }}
+              style={{ display: `${postOwner_id === +userId ? 'flex' : 'none'}` }}
               onClick={() => setRevealInput(!revealInput)}
             />
             <IoTrashSharp
-              style={{ display: `${postOwner_id == userId ? 'flex' : 'none'}` }}
+              style={{ display: `${postOwner_id === +userId ? 'flex' : 'none'}` }}
               onClick={() => setModalIsOpen(true)}
             />
           </div>
@@ -218,12 +218,12 @@ export default function SinglePost({
         )}
         <Snippet onClick={() => window.open(link)}>
           <TextArea>
-            <MetaTitle>{metadata.title}</MetaTitle>
-            <MetaDescription>{metadata.description}</MetaDescription>
-            <MetaLink>{metadata.url}</MetaLink>
+            <MetaTitle>{md_title}</MetaTitle>
+            <MetaDescription>{md_description}</MetaDescription>
+            <MetaLink>{link}</MetaLink>
           </TextArea>
           <ImageContainer>
-            <img src={metadata.image} alt='linkImage' />
+            <img src={md_image} alt='linkImage' />
           </ImageContainer>
         </Snippet>
       </Right>
