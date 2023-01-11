@@ -123,7 +123,7 @@ const ErrorMessage = styled.p`
 `;
 
 const Title = styled.div`
-  margin-top: 19px;
+  margin-top: 4.97rem;
   margin-bottom: 19px;
   font-family: 'Oswald', sans-serif;
   font-style: normal;
@@ -136,6 +136,7 @@ const Title = styled.div`
 `;
 
 const Main = styled.main`
+  margin-top: 2.9rem;
   @media (min-width: 660px) {
     display: flex;
     flex-direction: column;

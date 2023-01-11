@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import {textBaseColor} from '../../constants/colors.js'
+
 import { CustomerContext } from '../../components/context/customer.js';
 import SinglePost from '../../components/SinglePost.js';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
 import styled from 'styled-components';
 import swal from 'sweetalert';
+import { textBaseColor } from '../../constants/colors.js';
 
 export default function Hashtag() {
   const { hashtag } = useParams();
@@ -44,7 +45,7 @@ export default function Hashtag() {
           swal('ERROR 404', 'Não há posts nessa trend.', 'info');
         }
       });
-  }, [refreshPage, hashtag,refreshPage,setToken,setUserId,setUserImage,navigate]);
+  }, [refreshPage, hashtag, refreshPage, setToken, setUserId, setUserImage, navigate]);
 
   if (loadingPage === true) {
     return (
@@ -110,7 +111,9 @@ export default function Hashtag() {
   }
 }
 
-const AreaUtil = styled.div``;
+const AreaUtil = styled.div`
+  margin-top: 2.9rem;
+`;
 
 const ErrorMessage = styled.p`
   text-align: center;
@@ -122,7 +125,7 @@ const ErrorMessage = styled.p`
 `;
 
 const Title = styled.div`
-  margin-top: 19px;
+  margin-top: 4.97rem;
   margin-bottom: 19px;
   font-family: 'Oswald', sans-serif;
   font-style: normal;
@@ -135,6 +138,7 @@ const Title = styled.div`
 `;
 
 const Main = styled.main`
+  margin-top: 2.9rem;
   @media (min-width: 660px) {
     display: flex;
     flex-direction: column;

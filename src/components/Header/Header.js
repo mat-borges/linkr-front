@@ -72,6 +72,9 @@ export default function Header() {
 
 const HeaderContainer = styled.div`
   display: ${(props) => props.display};
+  z-index: 5;
+  position: fixed;
+  top: 0;
   justify-content: space-between;
   align-items: center;
   width: 100%;

@@ -4,6 +4,9 @@ import { IoHeart, IoHeartOutline, IoTrashSharp } from 'react-icons/io5';
 import { accentColor, textAccentColor, textBaseColor } from '../constants/colors';
 import { useContext, useEffect, useState } from 'react';
 
+import { AiOutlineComment } from 'react-icons/ai';
+import { BiRepost } from 'react-icons/bi';
+import Comments from './Comments.js';
 import { CustomerContext } from './context/customer';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import Modal from './Modal/Modal';
@@ -14,34 +17,37 @@ import styled from 'styled-components';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
 
-export default function SinglePost({
-  postOwner_id,
-  link,
-  description,
-  image,
-  name,
-  posts_id,
-  md_description,
-  md_title,
-  md_image,
-  refreshPage,
-  setRefreshPage,
-}) {
+export default function SinglePost(props) {
+  const {
+    postOwner_id,
+    link,
+    description,
+    image,
+    name,
+    posts_id,
+    md_description,
+    md_title,
+    md_image,
+    refreshPage,
+    setRefreshPage,
+  } = props;
+  const { token, userId, setToken, setUserImage, setUserId } = useContext(CustomerContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [likes, setLikes] = useState(0);
-  const { token, userId, setToken, setUserImage, setUserId } = useContext(CustomerContext);
   const [usersWhoLiked, setUsersWhoLiked] = useState([]);
   const [usersWhoLikedWithoutMe, setUsersWhoLikedWithoutMe] = useState([]);
-  const navigate = useNavigate();
   const [disabled, setDisabled] = useState(false);
   const [revealInput, setRevealInput] = useState(false);
   const [body, setBody] = useState({ description: description, link: link });
+  const [showComment, setShowComment] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
     setUserId(localStorage.getItem('user_id'));
     const tempUserId = localStorage.getItem('user_id');
     setUserImage(localStorage.getItem('user_image'));
+
     const fetchData = async () => {
       try {
         const response2 = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/like`);
@@ -124,6 +130,7 @@ export default function SinglePost({
     }
     return false;
   }
+
   function handleChange(e) {
     setBody({ ...body, [e.target.name]: e.target.value });
   }
@@ -153,110 +160,112 @@ export default function SinglePost({
   }
 
   return (
-    <PostContainer>
-      <Left>
-        <img
-          onClick={() => navigateToUserPage(postOwner_id)}
-          src={image}
-          alt='userImage'
-          style={{ cursor: 'pointer' }}
-        />
-        {thisUserLikedThisPost() ? (
-          <>
-            <IoHeart
-              id={`${posts_id}Liked`}
-              onClick={dislikePost}
-              style={{ marginBottom: '12px', cursor: 'pointer', color: 'red' }}
-            />
-            {likes === 1 ? (
-              <Tooltip anchorId={`${posts_id}Liked`} content={`Apenas você curtiu esse post`} place='bottom' />
-            ) : (
-              <Tooltip
-                anchorId={`${posts_id}Liked`}
-                content={`Você, ${usersWhoLikedWithoutMe[0]?.name}`}
-                place='bottom'
+    <>
+      <PostContainer>
+        <Left>
+          <img onClick={() => navigateToUserPage(postOwner_id)} src={image} alt='userImage' />
+          {thisUserLikedThisPost() ? (
+            <>
+              <IoHeart
+                id={`${posts_id}Liked`}
+                onClick={dislikePost}
+                style={{ marginBottom: '0.2em', cursor: 'pointer', color: 'red' }}
               />
-            )}
-          </>
-        ) : (
-          <>
-            <IoHeartOutline id={posts_id} onClick={likePost} style={{ marginBottom: '12px', cursor: 'pointer' }} />
-            <Tooltip anchorId={posts_id} content='Curtir!' place='bottom' />
-          </>
-        )}
-        <Likes>{likes}</Likes>
-      </Left>
-      <Right>
-        <Title>
-          <Name style={{ cursor: 'pointer' }} onClick={() => navigateToUserPage(postOwner_id)}>
-            {name}
-          </Name>
-          <div>
-            <MdOutlineModeEditOutline
-              style={{ display: `${postOwner_id === +userId ? 'flex' : 'none'}` }}
-              onClick={() => setRevealInput(!revealInput)}
+              {likes === 1 ? (
+                <Tooltip anchorId={`${posts_id}Liked`} content={`Apenas você curtiu esse post`} place='bottom' />
+              ) : (
+                <Tooltip
+                  anchorId={`${posts_id}Liked`}
+                  content={`Você, ${usersWhoLikedWithoutMe[0]?.name}`}
+                  place='bottom'
+                />
+              )}
+            </>
+          ) : (
+            <>
+              <IoHeartOutline id={posts_id} onClick={likePost} style={{ marginBottom: '0.2em', cursor: 'pointer' }} />
+              <Tooltip anchorId={posts_id} content='Curtir!' place='bottom' />
+            </>
+          )}
+          <Likes>{likes} likes</Likes>
+          <CommentsBox>
+            <AiOutlineComment size={'1.2rem'} onClick={() => setShowComment(!showComment)} />
+            <p>x comentários</p>
+          </CommentsBox>
+          <Shares>
+            <BiRepost style={{ cursor: 'pointer' }} size={'1.2rem'} />
+            <p>x re-posts</p>
+          </Shares>
+        </Left>
+        <Right>
+          <Title>
+            <Name onClick={() => navigateToUserPage(postOwner_id)}>{name}</Name>
+            <div>
+              <MdOutlineModeEditOutline
+                style={{ display: `${postOwner_id === +userId ? 'flex' : 'none'}` }}
+                onClick={() => setRevealInput(!revealInput)}
+              />
+              <IoTrashSharp
+                style={{ display: `${postOwner_id === +userId ? 'flex' : 'none'}` }}
+                onClick={() => setModalIsOpen(true)}
+              />
+            </div>
+          </Title>
+          {revealInput ? (
+            <input
+              disabled={disabled ? 'disabled' : ''}
+              onChange={handleChange}
+              onKeyUp={keyUp}
+              value={body.description}
+              name='description'
+              autoFocus
             />
-            <IoTrashSharp
-              style={{ display: `${postOwner_id === +userId ? 'flex' : 'none'}` }}
-              onClick={() => setModalIsOpen(true)}
-            />
-          </div>
-        </Title>
-        {revealInput ? (
-          <input
-            disabled={disabled ? 'disabled' : ''}
-            onChange={handleChange}
-            onKeyUp={keyUp}
-            value={body.description}
-            name='description'
-            autoFocus
-          />
-        ) : (
-          <ReactTagify colors={textBaseColor} tagClicked={(tag) => navigateToTrend(tag)}>
-            <Description>{description}</Description>
-          </ReactTagify>
-        )}
-        <Snippet onClick={() => window.open(link)}>
-          <TextArea>
-            <MetaTitle>{md_title}</MetaTitle>
-            <MetaDescription>{md_description}</MetaDescription>
-            <MetaLink>{link}</MetaLink>
-          </TextArea>
-          <ImageContainer>
-            <img src={md_image} alt='linkImage' />
-          </ImageContainer>
-        </Snippet>
-      </Right>
-      <Modal
-        token={token}
-        setModalIsOpen={setModalIsOpen}
-        modalIsOpen={modalIsOpen}
-        posts_id={posts_id}
-        setRefreshPage={setRefreshPage}
-        refreshPage={refreshPage}
-      />
-    </PostContainer>
+          ) : (
+            <ReactTagify colors={textBaseColor} tagClicked={(tag) => navigateToTrend(tag)}>
+              <Description>{description}</Description>
+            </ReactTagify>
+          )}
+          <Snippet onClick={() => window.open(link)}>
+            <TextArea>
+              <MetaTitle>{md_title}</MetaTitle>
+              <MetaDescription>{md_description}</MetaDescription>
+              <MetaLink>{link}</MetaLink>
+            </TextArea>
+            <ImageContainer>
+              <img src={md_image} alt='linkImage' />
+            </ImageContainer>
+          </Snippet>
+        </Right>
+        <Modal
+          token={token}
+          setModalIsOpen={setModalIsOpen}
+          modalIsOpen={modalIsOpen}
+          posts_id={posts_id}
+          setRefreshPage={setRefreshPage}
+          refreshPage={refreshPage}
+        />
+        <Comments showComment={showComment} />
+      </PostContainer>
+      <Blank height={showComment ? '23rem' : '0'}></Blank>
+    </>
   );
 }
 
-const ImageContainer = styled.div`
-  display: flex;
-`;
-
-const TextArea = styled.div`
-  display: flex;
-  padding: 7px 10px 8px 10px;
+const Blank = styled.div`
+  height: ${(props) => props.height};
 `;
 
 const PostContainer = styled.div`
-  width: 100%;
+  width: fit-content;
   max-width: 100vw;
-  height: 232px;
-  background: ${accentColor};
+  height: fit-content;
+  background-color: ${accentColor};
   display: flex;
   justify-content: center;
   padding: 10px 18px 15px 15px;
   margin-top: 19px;
+  position: relative;
+  z-index: 4;
   img {
     width: 40px;
     height: 40px;
@@ -272,6 +281,15 @@ const PostContainer = styled.div`
   }
 `;
 
+const ImageContainer = styled.div`
+  display: flex;
+`;
+
+const TextArea = styled.div`
+  display: flex;
+  padding: 7px 10px 8px 10px;
+`;
+
 const Right = styled.div`
   display: flex;
   flex-direction: column;
@@ -285,6 +303,7 @@ const Name = styled.h1`
   font-weight: 400;
   font-size: 17px;
   color: ${textBaseColor};
+  cursor: pointer;
 `;
 
 const Description = styled.h2`
@@ -379,16 +398,34 @@ const Left = styled.div`
   align-items: center;
   img {
     margin-bottom: 17px;
+    cursor: 'pointer';
   }
 `;
 
 const Likes = styled.p`
-  font-family: 'Lato';
+  font-family: 'Lato', sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 11px;
   text-align: center;
   color: ${textBaseColor};
+`;
+
+const CommentsBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1em;
+  font-size: 11px;
+  text-align: center;
+  color: ${textBaseColor};
+  line-height: 1.2em;
+  cursor: pointer;
+`;
+
+const Shares = styled(CommentsBox)`
+  cursor: inherit;
 `;
 
 const Title = styled.div`

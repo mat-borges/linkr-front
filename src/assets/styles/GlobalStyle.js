@@ -1,4 +1,4 @@
-import { baseColor, textBaseColor } from '../../constants/colors';
+import { accentColor, baseColor, detailColor, textBaseColor } from '../../constants/colors';
 
 import { createGlobalStyle } from 'styled-components';
 
@@ -23,9 +23,23 @@ time, mark, audio, video {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-size: 100%;
 	font: inherit;
+	font-size: 100%;
 	vertical-align: baseline;
+	::-webkit-scrollbar {
+		width: 0.3em;
+	}
+	::-webkit-scrollbar-track {
+		background: ${baseColor};
+	}
+	::-webkit-scrollbar-thumb {
+		max-height: 50%;
+		border-radius: 5px;
+		background: ${detailColor};
+		:hover {
+			background: ${accentColor};
+		}
+	}
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -33,11 +47,11 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
-	line-height: 1;
+	color: ${textBaseColor};
 	font-size: 17px;
+	line-height: 1;
 	font-family: 'Lato', sans-serif;
 	background-color: ${baseColor};
-	color: ${textBaseColor};
 }
 ol, ul {
 	list-style: none;
