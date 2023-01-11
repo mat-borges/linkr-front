@@ -6,7 +6,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 export default function SignIn() {
-  const { setToken, setUserId, setUserImage } = useContext(CustomerContext);
+  const { setToken, setUserId, setUserImage, setFollowing } = useContext(CustomerContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [clicado, setClicado] = useState(false);
@@ -22,7 +22,7 @@ export default function SignIn() {
       setUserImage(localStorage.user_image);
       navigate('/timeline');
     }
-  }, [navigate, setToken, setUserId, setUserImage]);
+  }, [navigate, setToken, setUserId, setUserImage, setFollowing]);
 
   function login(e) {
     e.preventDefault();
@@ -45,10 +45,13 @@ export default function SignIn() {
       setToken(res.data.token);
       setUserId(res.data.user_id);
       setUserImage(res.data.user_image);
+      setFollowing(JSON.stringify(res.data.following));
       setClicado(!clicado);
       localStorage.setItem(key, res.data.token);
       localStorage.setItem('user_id', res.data.user_id);
       localStorage.setItem('user_image', res.data.image);
+      localStorage.setItem('following', JSON.stringify(res.data.following));
+      console.log(localStorage);
       navigate('/timeline');
     });
     promisse.catch((err) => {
