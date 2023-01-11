@@ -158,6 +158,7 @@ const Main = styled.main`
   width: fit-content;
   max-width: 100vw;
   margin: 0 auto;
+  margin-top: 2.9rem;
   @media (min-width: 660px) {
     display: flex;
     flex-direction: column;
@@ -193,7 +194,7 @@ const ErrorMessage = styled.p`
 
 const Title = styled.h1`
   max-width: 100vw;
-  margin: 1.17rem 0 1.17rem 1rem;
+  margin: 4.97rem 0 1.17rem 1rem;
   color: ${textBaseColor};
   font-weight: 700;
   font-size: 1.95rem;
