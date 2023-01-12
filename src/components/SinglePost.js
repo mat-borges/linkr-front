@@ -250,7 +250,7 @@ export default function SinglePost(props) {
               <MetaLink>{link}</MetaLink>
             </TextArea>
             <ImageContainer>
-              <img src={md_image} alt='linkImage' />
+              <img src={md_image} alt='ImageNotFound' />
             </ImageContainer>
           </Snippet>
         </Right>
