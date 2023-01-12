@@ -7,56 +7,57 @@ import {
   textBaseColor,
   textCommentColor,
 } from '../constants/colors';
+import { useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
-export default function Comments({ showComment }) {
-  const comments = [
-    {
-      image: 'https://johto.legiaodosherois.com.br/wp-content/uploads/2021/03/legiao_sTSiCf40OA65.jpg',
-      user_name: 'Usuário X',
-      following: true,
-      text: 'Cometarinho do usuário',
-    },
-    {
-      image: 'https://johto.legiaodosherois.com.br/wp-content/uploads/2021/03/legiao_sTSiCf40OA65.jpg',
-      user_name: 'Usuário X',
-      following: true,
-      text: 'Cometarinho do usuário',
-    },
-    {
-      image: 'https://johto.legiaodosherois.com.br/wp-content/uploads/2021/03/legiao_sTSiCf40OA65.jpg',
-      user_name: 'Usuário X',
-      following: true,
-      text: 'Cometarinho do usuário',
-    },
-    {
-      image: 'https://johto.legiaodosherois.com.br/wp-content/uploads/2021/03/legiao_sTSiCf40OA65.jpg',
-      user_name: 'Usuário X',
-      following: false,
-      text: `Comentário do Usuário X, testando comentário gigante de um usuário que resolveu escrever um puta dum texto gigante, obrigado de nada Tentando aumentar mais ainda o do texto pra ver se não ultrapassa a margem`,
-    },
-    {
-      image: 'https://johto.legiaodosherois.com.br/wp-content/uploads/2021/03/legiao_sTSiCf40OA65.jpg',
-      user_name: 'Usuário X',
-      following: false,
-      text: `Comentário do Usuário X, testando comentário gigante de um usuário que resolveu escrever um puta dum texto gigante, obrigado de nada Tentando aumentar mais ainda o do texto pra ver se não ultrapassa a margem`,
-    },
-  ];
+export default function Comments({ showComment, sendHeight, comments, postOwner_id }) {
+  const siblingRef = useRef(null);
+  const following = JSON.parse(localStorage.following);
+
+  useEffect(() => {
+    sendHeight(siblingRef.current.clientHeight);
+  }, [showComment, comments, sendHeight]);
+
+  function handleObservationText(commentUser_id) {
+    if (commentUser_id === postOwner_id && following.find((e) => e.user_id === commentUser_id)) {
+      return (
+        <>
+          <FaCircle size={'0.4rem'} color={detailCommentColor} />
+          <p>Autor do Post</p>
+          <FaCircle size={'0.4rem'} color={detailCommentColor} />
+          <p>following</p>
+        </>
+      );
+    } else if (commentUser_id === postOwner_id) {
+      return (
+        <>
+          <FaCircle size={'0.4rem'} color={detailCommentColor} />
+          <p>Autor do Post</p>
+        </>
+      );
+    } else if (JSON.parse(localStorage.following).includes(commentUser_id)) {
+      return (
+        <>
+          <FaCircle size={'0.4rem'} color={detailCommentColor} />
+          <p>following</p>
+        </>
+      );
+    }
+  }
 
   return (
-    <CommentsContainer display={showComment ? 'initial' : 'none'}>
+    <CommentsContainer display={showComment ? 'initial' : 'none'} ref={siblingRef}>
       <CommentsList>
         {comments.map((comment) => (
-          <SingleComment>
-            <img src={comment.image} alt='teste' />
+          <SingleComment key={comment.id}>
+            <img src={comment.user_image} alt='teste' />
             <Text>
               <User>
                 <h1>{comment.user_name}</h1>
-                {comment.following ? <FaCircle size={'0.4rem'} color={detailCommentColor} /> : ''}
-                <p>{comment.following ? 'seguindo' : ''}</p>
+                {handleObservationText(comment.user_id)}
               </User>
-              <p>{comment.text}</p>
+              <p>{comment.comment}</p>
             </Text>
           </SingleComment>
         ))}
@@ -78,8 +79,7 @@ const CommentsContainer = styled.div`
   position: absolute;
   top: 100%;
   right: 0;
-  width: fit-content;
-  max-width: 100%;
+  width: 100%;
   height: fit-content;
   margin: 0 auto;
   padding: 0rem 1.2rem;
