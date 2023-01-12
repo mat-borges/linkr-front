@@ -11,13 +11,15 @@ import { textBaseColor } from '../../constants/colors.js';
 
 export default function UserPostPage() {
   const { id } = useParams();
-  const { setToken, setUserId, setUserImage } = useContext(CustomerContext);
+  const { setToken, setUserId, setUserImage, userId, setFollowing } = useContext(CustomerContext);
   const [posts, setPosts] = useState();
   const [loadingPage, setLoadingPage] = useState(true);
   const [error, setError] = useState();
   const [refreshPage, setRefreshPage] = useState(false);
   const [user, setUser] = useState('');
   const navigate = useNavigate();
+  const [disabled, setDisabled] = useState(false)
+  const [follow, setFollow] = useState()
 
   useEffect(() => {
     setLoadingPage(true);
@@ -45,8 +47,45 @@ export default function UserPostPage() {
         setLoadingPage(false);
         setError(true);
       });
-  }, [refreshPage, navigate, setToken, setUserId, setUserImage, id]);
-
+      const index = JSON.parse(localStorage.following).find((e) => e.user_id=== Number(id));
+      if(index){
+        setFollow(true); 
+      }else{
+        setFollow(false)
+      }
+  }, [refreshPage, navigate, setToken, setUserId, setUserImage, id, setFollowing]);
+ 
+  function updateFollowing() {
+    const config = {
+      headers: {
+        authorization: `Bearer ${localStorage.token}`,
+      },
+    };
+    setDisabled(true)
+    if (follow) {
+      axios.delete(`${process.env.REACT_APP_API_BASE_URL}/timeline/user/${id}/${userId}`, config)
+        .then((res) => {
+          setFollow(false)
+          setDisabled(false)
+          localStorage.setItem('following', JSON.stringify(res.data))
+        })
+        .catch(() => {
+          swal('Erro!', 'Não foi possível concluir a requisição', 'error')
+          setDisabled(false)
+        })
+    } else {
+      axios.post(`${process.env.REACT_APP_API_BASE_URL}/timeline/user/${id}`, userId, config)
+        .then((res) => {
+          setFollow(true)
+          setDisabled(false)
+          localStorage.setItem('following', JSON.stringify(res.data))
+        })
+        .catch(() => {
+          swal('Erro!', 'Não foi possível concluir a requisição', 'error')
+          setDisabled(false)
+        })
+    }
+  }
   if (loadingPage === true) {
     return (
       <Main>
@@ -84,7 +123,12 @@ export default function UserPostPage() {
     return (
       <Main>
         <AreaUtil>
-          <Title>{user}'s posts</Title>
+        <Title color={follow}>
+            <h1>{user}'s posts</h1>
+            {id === userId ? '' 
+            : 
+            <button disabled={disabled} onClick={updateFollowing}>{follow  ? 'Unfollow' : 'Follow'}</button>}
+          </Title>
           {posts !== [] ? (
             posts.map((p) => (
               <SinglePost
@@ -130,6 +174,19 @@ const Title = styled.div`
   font-weight: 700;
   font-size: 33px;
   color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  button{
+    width: 112px;
+  height: 31px;
+  border-radius: 5px;
+    background: ${props => props.color ? '#FFFFFF' : '#1877F2'};
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    color: ${props => props.color ? '#1877F2' : '#FFFFFF'};
+  }
   @media (min-width: 660px) {
     margin-top: 78px;
   }

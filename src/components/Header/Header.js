@@ -13,7 +13,7 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const [sideMenu, setSideMenu] = useState(false);
-  const { setToken, setUserImage, setUserId } = useContext(CustomerContext);
+  const { setToken, setUserImage, setUserId, userId } = useContext(CustomerContext);
 
   useEffect(() => {
     if (!localStorage.token && location.pathname !== '/signup' && location.pathname !== '/') {
@@ -53,6 +53,7 @@ export default function Header() {
             localStorage.removeItem('token');
             localStorage.removeItem('user_id');
             localStorage.removeItem('user_image');
+            localStorage.removeItem('following');
             setToken('');
             navigate('/');
           })
