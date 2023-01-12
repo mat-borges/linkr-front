@@ -76,14 +76,14 @@ const CommentsContainer = styled.div`
   display: ${(props) => props.display};
   z-index: -1;
   position: absolute;
-  top: 80%;
+  top: 100%;
   right: 0;
   width: fit-content;
   max-width: 100%;
   height: fit-content;
   margin: 0 auto;
   padding: 0rem 1.2rem;
-  border-radius: 0.8rem;
+  border-radius: 0 0 0.8rem 0.8rem;
   background-color: ${commentColor};
   form {
     display: flex;

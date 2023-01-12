@@ -1,7 +1,7 @@
 import 'react-tooltip/dist/react-tooltip.css';
 
 import { IoHeart, IoHeartOutline, IoTrashSharp } from 'react-icons/io5';
-import { accentColor, textAccentColor, textBaseColor } from '../constants/colors';
+import { accentColor, commentColor, textAccentColor, textBaseColor } from '../constants/colors';
 import { useContext, useEffect, useState } from 'react';
 
 import { AiOutlineComment } from 'react-icons/ai';
@@ -188,8 +188,8 @@ export default function SinglePost(props) {
             </>
           )}
           <Likes>{likes} likes</Likes>
-          <CommentsBox>
-            <AiOutlineComment size={'1.2rem'} onClick={() => setShowComment(!showComment)} />
+          <CommentsBox onClick={() => setShowComment(!showComment)}>
+            <AiOutlineComment size={'1.2rem'} />
             <p>x comentários</p>
           </CommentsBox>
           <Shares>
@@ -244,15 +244,48 @@ export default function SinglePost(props) {
           setRefreshPage={setRefreshPage}
           refreshPage={refreshPage}
         />
+        <FillContainer display={showComment ? 'initial' : 'none'}>
+          <div></div>
+          <div>
+            <div></div>
+          </div>
+        </FillContainer>
         <Comments showComment={showComment} />
       </PostContainer>
-      <Blank height={showComment ? '23rem' : '0'}></Blank>
+      <Blank height={showComment ? '26rem' : '0'}></Blank>
     </>
   );
 }
 
 const Blank = styled.div`
   height: ${(props) => props.height};
+`;
+
+const FillContainer = styled.div`
+  display: ${(props) => props.display};
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px 16px 0 0;
+  div {
+    :first-of-type {
+      height: 95%;
+      background-color: inherit;
+    }
+    :last-of-type {
+      height: 5%;
+      background-color: ${commentColor};
+      div {
+        width: 100%;
+        height: 100%;
+        background-color: ${accentColor};
+        border-radius: 0 0 16px 16px;
+      }
+    }
+  }
 `;
 
 const PostContainer = styled.div`
