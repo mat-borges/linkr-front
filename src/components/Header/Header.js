@@ -24,6 +24,15 @@ export default function Header() {
       setUserId(localStorage.user_id);
       setUserImage(localStorage.user_image);
     }
+    const config = {
+      headers: {
+        authorization: `Bearer ${localStorage.token}`,
+      },
+    };
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/following/:id`, config)
+      .then((res) => localStorage.setItem('following', JSON.stringify(res.data)))
+      .catch((err) => console.log(err));
     setSideMenu(false);
   }, [navigate, setUserImage, setUserId, setToken, location.pathname]);
 
