@@ -2,7 +2,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 
 import { IoHeart, IoHeartOutline, IoTrashSharp } from 'react-icons/io5';
 import { accentColor, commentColor, textAccentColor, textBaseColor } from '../constants/colors';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 
 import { AiOutlineComment } from 'react-icons/ai';
 import { BiRepost } from 'react-icons/bi';
@@ -40,8 +40,11 @@ export default function SinglePost(props) {
   const [revealInput, setRevealInput] = useState(false);
   const [body, setBody] = useState({ description: description, link: link });
   const [showComment, setShowComment] = useState(false);
+  const [comments, setComments] = useState([]);
   const navigate = useNavigate();
+  const targetRef = useRef(null);
 
+  // get post and verify user authentication
   useEffect(() => {
     setToken(localStorage.getItem('token'));
     setUserId(localStorage.getItem('user_id'));
@@ -70,7 +73,24 @@ export default function SinglePost(props) {
       }
     };
     fetchData();
-  }, [refreshPage, setToken, setUserId, setUserImage]);
+  }, [refreshPage, setToken, setUserId, setUserImage, posts_id]);
+
+  // get comments
+  useEffect(() => {
+    const config = {
+      headers: {
+        authorization: `Bearer ${localStorage.token}`,
+      },
+    };
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/posts/${posts_id}/comments`, config)
+      .then((res) => setComments(res.data))
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [posts_id, showComment]);
+
+  const handleCommentHeight = (height) => (targetRef.current.style.height = `${height}px`);
 
   function likePost() {
     const config = {
@@ -110,10 +130,6 @@ export default function SinglePost(props) {
         });
         console.log(err.response.data);
       });
-  }
-
-  function navigateToUserPage(postOwnerId) {
-    navigate(`/user/${postOwnerId}`);
   }
 
   function navigateToTrend(str) {
@@ -163,7 +179,7 @@ export default function SinglePost(props) {
     <>
       <PostContainer>
         <Left>
-          <img onClick={() => navigateToUserPage(postOwner_id)} src={image} alt='userImage' />
+          <img onClick={() => navigate(`/user/${postOwner_id}`)} src={image} alt='userImage' />
           {thisUserLikedThisPost() ? (
             <>
               <IoHeart
@@ -190,7 +206,9 @@ export default function SinglePost(props) {
           <Likes>{likes} likes</Likes>
           <CommentsBox onClick={() => setShowComment(!showComment)}>
             <AiOutlineComment size={'1.2rem'} />
-            <p>x comentários</p>
+            <p>
+              {comments.length} {comments.length > 1 ? ' comentários' : ' comentário'}
+            </p>
           </CommentsBox>
           <Shares>
             <BiRepost style={{ cursor: 'pointer' }} size={'1.2rem'} />
@@ -199,7 +217,7 @@ export default function SinglePost(props) {
         </Left>
         <Right>
           <Title>
-            <Name onClick={() => navigateToUserPage(postOwner_id)}>{name}</Name>
+            <Name onClick={() => navigate(`/user/${postOwner_id}`)}>{name}</Name>
             <div>
               <MdOutlineModeEditOutline
                 style={{ display: `${postOwner_id === +userId ? 'flex' : 'none'}` }}
@@ -232,7 +250,7 @@ export default function SinglePost(props) {
               <MetaLink>{link}</MetaLink>
             </TextArea>
             <ImageContainer>
-              <img src={md_image} alt='linkImage' />
+              <img src={md_image} alt='ImageNotFound' />
             </ImageContainer>
           </Snippet>
         </Right>
@@ -250,9 +268,14 @@ export default function SinglePost(props) {
             <div></div>
           </div>
         </FillContainer>
-        <Comments showComment={showComment} />
+        <Comments
+          showComment={showComment}
+          sendHeight={handleCommentHeight}
+          comments={comments}
+          postOwner_id={postOwner_id}
+        />
       </PostContainer>
-      <Blank height={showComment ? '26rem' : '0'}></Blank>
+      <Blank height={showComment ? '26rem' : '0'} ref={targetRef}></Blank>
     </>
   );
 }
@@ -431,7 +454,7 @@ const Left = styled.div`
   align-items: center;
   img {
     margin-bottom: 17px;
-    cursor: 'pointer';
+    cursor: pointer;
   }
 `;
 

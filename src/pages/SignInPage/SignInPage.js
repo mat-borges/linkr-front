@@ -45,13 +45,12 @@ export default function SignIn() {
       setToken(res.data.token);
       setUserId(res.data.user_id);
       setUserImage(res.data.user_image);
-      setFollowing(JSON.stringify(res.data.following));
+      setFollowing(res.data.following);
       setClicado(!clicado);
       localStorage.setItem(key, res.data.token);
       localStorage.setItem('user_id', res.data.user_id);
       localStorage.setItem('user_image', res.data.image);
       localStorage.setItem('following', JSON.stringify(res.data.following));
-      console.log(localStorage);
       navigate('/timeline');
     });
     promisse.catch((err) => {
