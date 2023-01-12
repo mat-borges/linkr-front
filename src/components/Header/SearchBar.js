@@ -20,6 +20,7 @@ export default function SearchBar() {
         authorization: `Bearer ${localStorage.token}`,
       },
     };
+
     if (searchInput.length >= minLength) {
       setLoading(true);
       const type = searchInput.includes('#') ? 'hashtag' : 'user';
