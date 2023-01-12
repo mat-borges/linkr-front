@@ -6,7 +6,7 @@ import {
   detailCommentColor,
   textBaseColor,
   textCommentColor,
-} from '../constants/colors';
+} from '../constants/colors.js';
 import { useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
