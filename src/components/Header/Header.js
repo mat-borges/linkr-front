@@ -13,7 +13,7 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const [sideMenu, setSideMenu] = useState(false);
-  const { setToken, setUserImage, setUserId, userId } = useContext(CustomerContext);
+  const { setToken, setUserImage, setUserId } = useContext(CustomerContext);
 
   useEffect(() => {
     if (!localStorage.token && location.pathname !== '/signup' && location.pathname !== '/') {

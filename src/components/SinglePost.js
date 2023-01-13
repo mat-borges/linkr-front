@@ -41,7 +41,7 @@ export default function SinglePost(props) {
   const [body, setBody] = useState({ description: description, link: link });
   const [showComment, setShowComment] = useState(false);
   const [comments, setComments] = useState([]);
-  const [action, setAction] = useState('')
+  const [action, setAction] = useState('');
   const navigate = useNavigate();
   const targetRef = useRef(null);
 
@@ -51,7 +51,7 @@ export default function SinglePost(props) {
     setUserId(localStorage.getItem('user_id'));
     const tempUserId = localStorage.getItem('user_id');
     setUserImage(localStorage.getItem('user_image'));
-    setFollowing(localStorage.following)
+    setFollowing(localStorage.following);
 
     const fetchData = async () => {
       try {
@@ -75,7 +75,7 @@ export default function SinglePost(props) {
       }
     };
     fetchData();
-  }, [refreshPage, setToken, setUserId, setUserImage, posts_id]);
+  }, [refreshPage, setToken, setUserId, setUserImage, posts_id, setFollowing]);
 
   // get comments
   useEffect(() => {
@@ -213,9 +213,14 @@ export default function SinglePost(props) {
             </p>
           </CommentsBox>
           <Shares>
-          <BiRepost style={{ cursor: 'pointer' }} size={'1.2rem'} onClick={() => {
-              setAction('reposting')
-              setModalIsOpen(true)}}/>
+            <BiRepost
+              style={{ cursor: 'pointer' }}
+              size={'1.2rem'}
+              onClick={() => {
+                setAction('reposting');
+                setModalIsOpen(true);
+              }}
+            />
             <p>x re-posts</p>
           </Shares>
         </Left>
@@ -230,8 +235,9 @@ export default function SinglePost(props) {
               <IoTrashSharp
                 style={{ display: `${postOwner_id === +userId ? 'flex' : 'none'}` }}
                 onClick={() => {
-                  setAction('deleting')
-                  setModalIsOpen(true)}}
+                  setAction('deleting');
+                  setModalIsOpen(true);
+                }}
               />
             </div>
           </Title>
@@ -281,6 +287,8 @@ export default function SinglePost(props) {
           sendHeight={handleCommentHeight}
           comments={comments}
           postOwner_id={postOwner_id}
+          post_id={posts_id}
+          setComments={setComments}
         />
       </PostContainer>
       <Blank height={showComment ? '26rem' : '0'} ref={targetRef}></Blank>

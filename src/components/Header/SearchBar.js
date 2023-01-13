@@ -45,7 +45,6 @@ export default function SearchBar() {
   }, [searchInput]);
 
   function handleSearchOnFocus() {
-    const minWidth = 800;
     setSearchFocus(true);
     setIsVisible(true);
   }
