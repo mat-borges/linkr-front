@@ -12,7 +12,8 @@ export default function Preview(props) {
   const navigate = useNavigate();
   const ulRef = useRef(null);
   const minLength = 3;
-  const following = JSON.parse(localStorage.following);
+  const following = [];
+  if (localStorage.following) following.push(...JSON.parse(localStorage.following));
 
   function handleClick(result) {
     let path = '';
