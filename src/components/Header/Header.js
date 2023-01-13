@@ -1,4 +1,4 @@
-import { accentColor, detailColor, textBaseColor } from '../../constants/colors.js';
+import { accentColor, detailColor, detailCommentColor, textBaseColor } from '../../constants/colors.js';
 import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -50,7 +50,6 @@ export default function Header() {
         Authorization: `Bearer ${localStorage.token}`,
       },
     };
-
     swal({ title: 'Tem certeza que deseja deslogar?', icon: 'warning', buttons: [true, true] }).then((res) => {
       if (res) {
         axios
@@ -79,7 +78,12 @@ export default function Header() {
         <MenuIcon clicked={sideMenu ? 'true' : 'false'} size={'0.7em'} />
         <img src={localStorage.user_image} alt='userAvatar' />
         <SideMenu display={sideMenu ? 'true' : 'false'}>
-          <li onClick={logOut}>LogOut</li>
+          <li onClick={() => navigate(`/user/${localStorage.user_id}`)}>
+            <p>Seus Posts</p>
+          </li>
+          <li onClick={logOut}>
+            <p>Log Out</p>
+          </li>
         </SideMenu>
       </RightBox>
     </HeaderContainer>
@@ -135,10 +139,18 @@ const SideMenu = styled.ul`
   li {
     font-size: 1.2rem;
     text-align: center;
+    padding: 0.5em 0;
     cursor: pointer;
-    :hover {
-      transition: all 0.2s linear;
-      transform: scale(1.2);
+    border-bottom: 1px solid ${detailCommentColor};
+    width: 100%;
+    p {
+      :hover {
+        transition: all 0.2s linear;
+        transform: scale(1.1);
+      }
+    }
+    :last-of-type {
+      border-bottom: none;
     }
   }
 `;
