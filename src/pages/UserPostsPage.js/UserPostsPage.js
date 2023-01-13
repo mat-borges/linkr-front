@@ -193,6 +193,7 @@ const Title = styled.div`
     font-weight: 700;
     font-size: 14px;
     color: ${(props) => (props.color === 'true' ? '#1877F2' : textBaseColor)};
+    cursor: pointer;
   }
   @media (min-width: 660px) {
     margin-top: 78px;
