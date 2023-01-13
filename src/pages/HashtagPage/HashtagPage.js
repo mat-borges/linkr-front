@@ -85,7 +85,7 @@ export default function Hashtag() {
       <Main>
         <AreaUtil>
           <Title># {hashtag}</Title>
-          {posts !== [] ? (
+          {posts.length !== 0 ? (
             posts.map((p) => (
               <SinglePost
                 key={p.posts_id}
