@@ -84,6 +84,7 @@ export default function Timeline() {
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/timeline`, config)
       .then((res) => {
+        console.log(res.data)
         setPosts(res.data);
         setNewPosts(res.data);
         setDelay(15000);
