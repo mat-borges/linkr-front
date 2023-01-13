@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { accentColor, commentColor, textAccentColor, textBaseColor,buttonsColor } from '../constants/colors';
+import { buttonsColor } from '../constants/colors';
 
-export default function RefreshPostsButton({children}){
+export default function RefreshPostsButton({children,AddNewPostsToPostsList}){
     return(
-        <RefreshButtonContainer>
+        <RefreshButtonContainer onClick={AddNewPostsToPostsList}>
             {children}
         </RefreshButtonContainer>
     )
