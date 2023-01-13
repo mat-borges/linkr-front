@@ -18,8 +18,8 @@ export default function UserPostPage() {
   const [refreshPage, setRefreshPage] = useState(false);
   const [user, setUser] = useState('');
   const navigate = useNavigate();
-  const [disabled, setDisabled] = useState(false)
-  const [follow, setFollow] = useState()
+  const [disabled, setDisabled] = useState(false);
+  const [follow, setFollow] = useState();
 
   useEffect(() => {
     setLoadingPage(true);
@@ -47,45 +47,48 @@ export default function UserPostPage() {
         setLoadingPage(false);
         setError(true);
       });
-      const index = JSON.parse(localStorage.following).find((e) => e.user_id=== Number(id));
-      if(index){
-        setFollow(true); 
-      }else{
-        setFollow(false)
-      }
+    const index = JSON.parse(localStorage.following).find((e) => e.user_id === Number(id));
+    if (index) {
+      setFollow(true);
+    } else {
+      setFollow(false);
+    }
   }, [refreshPage, navigate, setToken, setUserId, setUserImage, id, setFollowing]);
- 
+
   function updateFollowing() {
     const config = {
       headers: {
         authorization: `Bearer ${localStorage.token}`,
       },
     };
-    setDisabled(true)
+    setDisabled(true);
     if (follow) {
-      axios.delete(`${process.env.REACT_APP_API_BASE_URL}/timeline/user/${id}/${userId}`, config)
+      axios
+        .delete(`${process.env.REACT_APP_API_BASE_URL}/timeline/user/${id}/${userId}`, config)
         .then((res) => {
-          setFollow(false)
-          setDisabled(false)
-          localStorage.setItem('following', JSON.stringify(res.data))
+          setFollow(false);
+          setDisabled(false);
+          localStorage.setItem('following', JSON.stringify(res.data));
         })
         .catch(() => {
-          swal('Erro!', 'Não foi possível concluir a requisição', 'error')
-          setDisabled(false)
-        })
+          swal('Erro!', 'Não foi possível concluir a requisição', 'error');
+          setDisabled(false);
+        });
     } else {
-      axios.post(`${process.env.REACT_APP_API_BASE_URL}/timeline/user/${id}`, userId, config)
+      axios
+        .post(`${process.env.REACT_APP_API_BASE_URL}/timeline/user/${id}`, userId, config)
         .then((res) => {
-          setFollow(true)
-          setDisabled(false)
-          localStorage.setItem('following', JSON.stringify(res.data))
+          setFollow(true);
+          setDisabled(false);
+          localStorage.setItem('following', JSON.stringify(res.data));
         })
         .catch(() => {
-          swal('Erro!', 'Não foi possível concluir a requisição', 'error')
-          setDisabled(false)
-        })
+          swal('Erro!', 'Não foi possível concluir a requisição', 'error');
+          setDisabled(false);
+        });
     }
   }
+
   if (loadingPage === true) {
     return (
       <Main>
@@ -123,13 +126,17 @@ export default function UserPostPage() {
     return (
       <Main>
         <AreaUtil>
-        <Title color={follow}>
+          <Title color={follow.toString()}>
             <h1>{user}'s posts</h1>
-            {id === userId ? '' 
-            : 
-            <button disabled={disabled} onClick={updateFollowing}>{follow  ? 'Unfollow' : 'Follow'}</button>}
+            {id === userId ? (
+              ''
+            ) : (
+              <button disabled={disabled} onClick={updateFollowing}>
+                {follow ? 'Unfollow' : 'Follow'}
+              </button>
+            )}
           </Title>
-          {posts !== [] ? (
+          {posts.length !== 0 ? (
             posts.map((p) => (
               <SinglePost
                 key={p.id}
@@ -163,7 +170,7 @@ const ErrorMessage = styled.p`
   font-style: italic;
   font-weight: 400;
   font-size: 20px;
-  color: #ffffff;
+  color: ${textBaseColor};
 `;
 
 const Title = styled.div`
@@ -173,19 +180,19 @@ const Title = styled.div`
   font-style: normal;
   font-weight: 700;
   font-size: 33px;
-  color: #ffffff;
+  color: ${textBaseColor};
   display: flex;
   justify-content: space-between;
-  button{
+  button {
     width: 112px;
-  height: 31px;
-  border-radius: 5px;
-    background: ${props => props.color ? '#FFFFFF' : '#1877F2'};
+    height: 31px;
+    border-radius: 5px;
+    background: ${(props) => (props.color === 'true' ? textBaseColor : '#1877F2')};
     font-family: 'Lato';
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
-    color: ${props => props.color ? '#1877F2' : '#FFFFFF'};
+    color: ${(props) => (props.color === 'true' ? '#1877F2' : textBaseColor)};
   }
   @media (min-width: 660px) {
     margin-top: 78px;
