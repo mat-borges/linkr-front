@@ -18,14 +18,40 @@ export default function Hashtag() {
   const [error, setError] = useState();
   const [refreshPage, setRefreshPage] = useState(false);
   const { setToken, setUserId, setUserImage } = useContext(CustomerContext);
-  const [count, setCount] = useState(0);
-  
-  useInterval(()=>{
-    setCount(count+1)
-  },15000)
-  
-
+  const [postsCount, setPostsCount] = useState(0);
   const navigate = useNavigate();
+
+
+  async function SearchForNewPosts(token) {
+    const config = {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const promise = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/hashtag/${hashtag}`, config)
+      console.log(promise.data)
+    } catch (err) {
+      if (err.response.status === 404) {
+        swal('ERROR 404', 'Não há posts nessa trend.', 'info');
+      }
+    }
+  }
+
+  const tempToken = localStorage.getItem('token');
+  const config = {
+    headers: {
+      authorization: `Bearer ${tempToken}`,
+    },
+  };
+
+  useInterval(() => {
+
+    SearchForNewPosts(tempToken);
+    
+  }, 15000)
+
   useEffect(() => {
     setLoadingPage(true);
     if (!localStorage.getItem('token')) {
@@ -41,11 +67,13 @@ export default function Hashtag() {
         authorization: `Bearer ${tempToken}`,
       },
     };
+
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/hashtag/${hashtag}`, config)
       .then((res) => {
         setPosts(res.data);
         setLoadingPage(false);
+        setPostsCount(res.data.length)
       })
       .catch((err) => {
         setLoadingPage(false);
@@ -90,12 +118,11 @@ export default function Hashtag() {
       </Main>
     );
   } else {
-    {console.log(count)}
     return (
       <Main>
         <AreaUtil>
           <Title># {hashtag}</Title>
-          <h1>{posts.length}</h1>
+          <h1>{postsCount}</h1>
           {posts !== [] ? (
             // posts.map((p) => (
             //   <SinglePost
@@ -113,7 +140,7 @@ export default function Hashtag() {
             //     setRefreshPage={setRefreshPage}
             //   />
             // ))
-            <PostList posts={posts}/>
+            <PostList posts={posts} />
           ) : (
             <ErrorMessage>Ainda não há posts</ErrorMessage>
           )}
