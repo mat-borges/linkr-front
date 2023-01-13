@@ -28,8 +28,6 @@ export default function SinglePost(props) {
     md_description,
     md_title,
     md_image,
-    refreshPage,
-    setRefreshPage,
   } = props;
   const { token, userId, setToken, setUserImage, setUserId } = useContext(CustomerContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -40,6 +38,7 @@ export default function SinglePost(props) {
   const [revealInput, setRevealInput] = useState(false);
   const [body, setBody] = useState({ description: description, link: link });
   const [showComment, setShowComment] = useState(false);
+  const [refreshPage,setRefreshPage] = useState(false)
   const [comments, setComments] = useState([]);
   const navigate = useNavigate();
   const targetRef = useRef(null);
