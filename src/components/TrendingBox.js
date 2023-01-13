@@ -6,7 +6,8 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-export default function TrendingBox({ background, color, hide, width, placedAt, setIsVisible }) {
+export default function TrendingBox(props) {
+  const { background, color, hide, width, placedAt, setIsVisible } = props;
   const [hashtags, setHashtags] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ export default function TrendingBox({ background, color, hide, width, placedAt, 
 }
 
 const TrendingContainer = styled.div`
-  display: ${(props) => (props.placedAt === 'SearchBar' || props.hide === 'true' ? 'none' : 'flex')};
+  display: ${(props) => (props.placedAt !== 'TimelinePage' || props.hide === 'true' ? 'none' : 'flex')};
   flex-direction: column;
   width: ${(props) => props.width};
   max-width: 300px;
@@ -75,7 +76,7 @@ const TrendingContainer = styled.div`
     cursor: auto;
   }
   @media (max-width: 800px) {
-    display: ${(props) => (props.placedAt === 'SearchBar' ? 'flex' : 'none')};
+    display: ${(props) => (props.placedAt !== 'TimelinePage' ? 'flex' : 'none')};
   }
 `;
 
