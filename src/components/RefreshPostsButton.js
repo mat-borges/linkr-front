@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { accentColor, commentColor, textAccentColor, textBaseColor,buttonsCollor } from '../constants/colors';
+import { accentColor, commentColor, textAccentColor, textBaseColor,buttonsColor } from '../constants/colors';
 
 export default function RefreshPostsButton({children}){
     return(
@@ -13,7 +13,7 @@ export default function RefreshPostsButton({children}){
 const RefreshButtonContainer = styled.div`
   max-width: 100vw;
   height: fit-content;
-  background-color: ${buttonsCollor};
+  background-color: ${buttonsColor};
   display: flex;
   justify-content: center;
   padding: 10px 18px 15px 15px;
@@ -24,7 +24,7 @@ const RefreshButtonContainer = styled.div`
   @media (min-width: 660px) {
     width: 611px;
     height: 61px;
-    background: ${buttonsCollor};
+    background: ${buttonsColor};
     border-radius: 16px;
     justify-content: center;
     align-items: center;

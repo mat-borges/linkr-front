@@ -15,4 +15,4 @@ export const textPublishColor = '#707070';
 export const inputPublishColor = '#EFEFEF';
 export const textInputPublishColor = '#949494';
 
-export const buttonsCollor = '#1877F2'
+export const buttonsColor = '#1877F2'
