@@ -8,6 +8,8 @@ import axios from 'axios';
 import styled from 'styled-components';
 import swal from 'sweetalert';
 import { textBaseColor } from '../../constants/colors.js';
+import PostList from '../../components/PostList.js';
+import useInterval from 'use-interval';
 
 export default function Hashtag() {
   const { hashtag } = useParams();
@@ -16,6 +18,13 @@ export default function Hashtag() {
   const [error, setError] = useState();
   const [refreshPage, setRefreshPage] = useState(false);
   const { setToken, setUserId, setUserImage } = useContext(CustomerContext);
+  const [count, setCount] = useState(0);
+  
+  useInterval(()=>{
+    setCount(count+1)
+  },15000)
+  
+
   const navigate = useNavigate();
   useEffect(() => {
     setLoadingPage(true);
@@ -81,27 +90,30 @@ export default function Hashtag() {
       </Main>
     );
   } else {
+    {console.log(count)}
     return (
       <Main>
         <AreaUtil>
           <Title># {hashtag}</Title>
+          <h1>{posts.length}</h1>
           {posts !== [] ? (
-            posts.map((p) => (
-              <SinglePost
-                key={p.posts_id}
-                postOwner_id={p.user_id}
-                posts_id={p.posts_id}
-                link={p.link}
-                md_description={p.md_description}
-                md_title={p.md_title}
-                md_image={p.md_image}
-                description={p.description}
-                name={p.name}
-                image={p.image}
-                refreshPage={refreshPage}
-                setRefreshPage={setRefreshPage}
-              />
-            ))
+            // posts.map((p) => (
+            //   <SinglePost
+            //     key={p.posts_id}
+            //     postOwner_id={p.user_id}
+            //     posts_id={p.posts_id}
+            //     link={p.link}
+            //     md_description={p.md_description}
+            //     md_title={p.md_title}
+            //     md_image={p.md_image}
+            //     description={p.description}
+            //     name={p.name}
+            //     image={p.image}
+            //     refreshPage={refreshPage}
+            //     setRefreshPage={setRefreshPage}
+            //   />
+            // ))
+            <PostList posts={posts}/>
           ) : (
             <ErrorMessage>Ainda não há posts</ErrorMessage>
           )}
