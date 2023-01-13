@@ -98,7 +98,7 @@ const PublishContainer = styled.div`
     height: 2.6em;
     margin-right: 1.1rem;
     border-radius: 50%;
-    object-fit: contain;
+    object-fit: cover;
   }
   div {
     width: 100%;

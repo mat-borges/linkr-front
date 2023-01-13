@@ -70,7 +70,7 @@ export default function SinglePost(props) {
           title: `Houve um erro ao carregar metadata do post ${posts_id}!`,
           icon: 'error',
         });
-        console.log(err.response.data);
+        console.log(err.response);
       }
     };
     fetchData();
@@ -228,11 +228,11 @@ export default function SinglePost(props) {
             <Name onClick={() => navigate(`/user/${postOwner_id}`)}>{name}</Name>
             <div>
               <MdOutlineModeEditOutline
-                style={{ display: `${postOwner_id === +userId ? 'flex' : 'none'}` }}
+                style={{ display: `${postOwner_id === +userId ? 'flex' : 'none'}`, cursor: 'pointer' }}
                 onClick={() => setRevealInput(!revealInput)}
               />
               <IoTrashSharp
-                style={{ display: `${postOwner_id === +userId ? 'flex' : 'none'}` }}
+                style={{ display: `${postOwner_id === +userId ? 'flex' : 'none'}`, cursor: 'pointer' }}
                 onClick={() => {
                   setAction('deleting');
                   setModalIsOpen(true);

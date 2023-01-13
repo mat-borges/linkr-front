@@ -118,7 +118,7 @@ export default function Timeline() {
         <Container>
           <LeftBox>
             <PublishPost refreshPage={refreshPage} setRefreshPage={setRefreshPage} />
-            {posts !== [] ? (
+            {posts.length !== 0 ? (
               posts.map((p) => (
                 <SinglePost
                   key={p.posts_id}
