@@ -115,10 +115,12 @@ const RightBox = styled.div`
   align-items: center;
   img {
     width: 1em;
+    height: 1em;
     margin-left: 1rem;
     border: 2px solid ${textBaseColor};
     border-radius: 50%;
     cursor: pointer;
+    object-fit: cover;
   }
 `;
 
