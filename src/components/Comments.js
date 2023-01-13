@@ -21,7 +21,8 @@ export default function Comments(props) {
   const navigate = useNavigate();
   const siblingRef = useRef(null);
   const commentListRef = useRef(null);
-  const following = JSON.parse(localStorage.following);
+  const following = [];
+  if (localStorage.following) following.push(...JSON.parse(localStorage.following));
 
   useEffect(() => {
     sendHeight(siblingRef.current.clientHeight);

@@ -1,5 +1,4 @@
 import {
-  baseColor,
   inputPublishColor,
   publishColor,
   textBaseColor,
@@ -74,8 +73,8 @@ export default function PublishPost({ refreshPage, setRefreshPage }) {
             onChange={handleForm}
             disabled={publishing ? 'diabled' : ''}
           />
-          <button type='submit' disabled={publishing ? 'diabled' : ''}>
-            {publishing ? 'Publishing...' : 'Publish'}
+          <button type='submit' disabled={publishing ? 'disabled' : ''}>
+            {publishing ? <p>Publishing...</p> : <p>Publish</p>}
           </button>
         </form>
       </div>
@@ -141,6 +140,7 @@ const PublishContainer = styled.div`
         }
       }
       button {
+        max-height: 1.82rem;
         width: 7rem;
         margin-top: 0.3rem;
         padding: 0.5rem 0;
@@ -152,7 +152,7 @@ const PublishContainer = styled.div`
         cursor: pointer;
         background-color: #1877f2;
         :hover {
-          outline: ${(props) => (props.publishing ? '' : `1px solid ${baseColor}`)};
+          outline: ${(props) => (props.publishing ? '' : `1px solid ${textPublishColor}`)};
           font-size: ${(props) => (props.publishing ? '0.8rem' : `0.9rem`)};
         }
         :disabled {
