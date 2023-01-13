@@ -12,11 +12,13 @@ import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import swal from 'sweetalert';
+import { useNavigate } from 'react-router-dom';
 
 export default function Comments(props) {
   const { showComment, sendHeight, comments, postOwner_id, post_id, setComments } = props;
   const [commentInput, setCommentInput] = useState('');
   const [commenting, setCommenting] = useState(false);
+  const navigate = useNavigate();
   const siblingRef = useRef(null);
   const commentListRef = useRef(null);
   const following = JSON.parse(localStorage.following);
@@ -96,10 +98,10 @@ export default function Comments(props) {
       <CommentsList ref={commentListRef}>
         {comments.map((comment) => (
           <SingleComment key={comment.id}>
-            <img src={comment.user_image} alt='teste' />
+            <img src={comment.user_image} alt='teste' onClick={() => navigate(`/user/${comment.user_id}`)} />
             <Text>
               <User>
-                <h1>{comment.user_name}</h1>
+                <h1 onClick={() => navigate(`/user/${comment.user_id}`)}>{comment.user_name}</h1>
                 {handleObservationText(comment.user_id)}
               </User>
               <p>{comment.comment}</p>
@@ -203,6 +205,7 @@ const SingleComment = styled.div`
     height: 2.5rem;
     border-radius: 50%;
     object-fit: cover;
+    cursor: pointer;
   }
   :last-of-type {
     border-bottom: none;
@@ -233,6 +236,9 @@ const User = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 0.4rem;
+  h1 {
+    cursor: pointer;
+  }
   p {
     margin-left: 0.8em;
     color: ${textCommentColor};
