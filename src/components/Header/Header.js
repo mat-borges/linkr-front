@@ -13,7 +13,7 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const [sideMenu, setSideMenu] = useState(false);
-  const { setToken, setUserImage, setUserId } = useContext(CustomerContext);
+  const { setToken, setUserImage, setUserId, userId } = useContext(CustomerContext);
 
   useEffect(() => {
     if (!localStorage.token && location.pathname !== '/signup' && location.pathname !== '/') {
@@ -24,6 +24,15 @@ export default function Header() {
       setUserId(localStorage.user_id);
       setUserImage(localStorage.user_image);
     }
+    const config = {
+      headers: {
+        authorization: `Bearer ${localStorage.token}`,
+      },
+    };
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/following/:id`, config)
+      .then((res) => localStorage.setItem('following', JSON.stringify(res.data)))
+      .catch((err) => console.log(err));
     setSideMenu(false);
   }, [navigate, setUserImage, setUserId, setToken, location.pathname]);
 
@@ -44,6 +53,7 @@ export default function Header() {
             localStorage.removeItem('token');
             localStorage.removeItem('user_id');
             localStorage.removeItem('user_image');
+            localStorage.removeItem('following');
             setToken('');
             navigate('/');
           })

@@ -5,75 +5,97 @@ import ReactModal from "react-modal";
 import styled from "styled-components";
 import Swal from 'sweetalert2'
 
-export default function Modal({setModalIsOpen, modalIsOpen, posts_id, setRefreshPage, refreshPage, token}){
-    const [deleting, setDeleting] = useState(false)
+export default function Modal({ setModalIsOpen, modalIsOpen, posts_id, setRefreshPage, refreshPage, token, action, userId }) {
+    const [loading, setLoading] = useState(false)
 
-    function deletePost(posts_id) {
-        const config = {headers: {Authorization: `Bearer ${token}`}}
-        setDeleting(true)
-        axios.delete(`${process.env.REACT_APP_API_BASE_URL}/timeline/${posts_id}`, config)
-            .then(() => {
-                setModalIsOpen(false)
-                setDeleting(false)
-                setRefreshPage(!refreshPage)
-            })
-            .catch(() => {
-                setDeleting(false)
-                setModalIsOpen(false)
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong!',
-                  })
-            }) 
+    function actionPost(posts_id) {
+        const config = { headers: { Authorization: `Bearer ${token}` } }
+        setLoading(true)
+        if (action === 'deleting') {
+            axios.delete(`${process.env.REACT_APP_API_BASE_URL}/timeline/${posts_id}`, config)
+                .then(() => {
+                    setModalIsOpen(false)
+                    setLoading(false)
+                    setRefreshPage(!refreshPage)
+                })
+                .catch(() => {
+                    setLoading(false)
+                    setModalIsOpen(false)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!',
+                    })
+                })
+        } else {
+            axios.post(`${process.env.REACT_APP_API_BASE_URL}/timeline/${posts_id}`, userId, config)
+                .then(() => {
+                    setModalIsOpen(false)
+                    setLoading(false)
+                    setRefreshPage(!refreshPage)
+                })
+                .catch((err) => {
+                    setLoading(false)
+                    setModalIsOpen(false)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: err.response.data,
+                    })
+                })
+        }
     }
-
-    return(
+    return (
         <ReactModal
-                isOpen={modalIsOpen}
-                ariaHideApp={false}
-                style={{
-                    overlay: {
-                        position: 'fixed',
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    },
-                    content: {
-                        position: 'relative',
-                        width: '597px',
-                        height: '262px',
-                        background: '#333333',
-                        borderRadius: '50px',
-                        fontFamily: 'Lato',
-                        fontWeight: 700,
-                        fontStyle: 'normal',
-                        fontSize: '34px',
-                        textAlign: 'center',
-                        color: '#FFFFFF',
-                        lineHeight: '41px',
-                        display: 'flex',
-                        flexDirection:'column',
-                        alignItems:'center',
-                        justifyContent:'center'
-                    }
-                }}>
-                <h1>Are you sure you want <br/>to delete this post?</h1>
-                <ButtonContainer>
-                    <NoButton onClick={() => setModalIsOpen(false)}>No, go back</NoButton>
-                    <YesButton onClick={() => deletePost(posts_id)}>{deleting ?
+            isOpen={modalIsOpen}
+            ariaHideApp={false}
+            style={{
+                overlay: {
+                    position: 'fixed',
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    zIndex: 5,
+                },
+                content: {
+                    position: 'relative',
+                    width: '597px',
+                    height: '262px',
+                    background: '#333333',
+                    borderRadius: '50px',
+                    fontFamily: 'Lato',
+                    fontWeight: 700,
+                    fontStyle: 'normal',
+                    fontSize: '34px',
+                    textAlign: 'center',
+                    color: '#FFFFFF',
+                    lineHeight: '41px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }
+            }}>
+            {action === 'deleting' ?
+                <h1>Are you sure you want <br />to delete this post?</h1>
+                :
+                <h1>D you want to re-post <br />this link?</h1>
+            }
+            <ButtonContainer>
+                <NoButton onClick={() => setModalIsOpen(false)}>{action === 'deleting' ? 'No, go back' : 'No, cancel'}</NoButton>
+                <YesButton onClick={() => actionPost(posts_id)}>{loading ?
                     <ThreeDots
                         height="80"
                         width="80"
                         radius="9"
                         color="#4fa94d"
                         ariaLabel="three-dots-loading"
-                    />: "Yes, delete it"}</YesButton>
-                </ButtonContainer>
-            </ReactModal>
+                    /> : action === 'deleting' ? "Yes, delete it" : 'Yes, share!'}</YesButton>
+            </ButtonContainer>
+        </ReactModal>
     )
 }
 
