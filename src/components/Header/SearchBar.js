@@ -44,6 +44,12 @@ export default function SearchBar() {
     }
   }, [searchInput]);
 
+  function handleSearchOnFocus() {
+    const minWidth = 800;
+    setSearchFocus(true);
+    setIsVisible(true);
+  }
+
   return (
     <Search>
       <form onSubmit={(e) => e.preventDefault()}>
@@ -55,10 +61,7 @@ export default function SearchBar() {
           autoComplete='off'
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          onFocus={() => {
-            setSearchFocus(true);
-            setIsVisible(true);
-          }}
+          onFocus={() => handleSearchOnFocus()}
           onBlur={() => setSearchFocus(false)}
           minLength={minLength}
           debounceTimeout={300}
