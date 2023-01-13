@@ -30,9 +30,15 @@ export default function Header() {
       },
     };
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/following/:id`, config)
+      .get(`${process.env.REACT_APP_API_BASE_URL}/following/${localStorage.user_id}`, config)
       .then((res) => localStorage.setItem('following', JSON.stringify(res.data)))
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (err.response.status === 401 && location.pathname !== '/signup' && location.pathname !== '/') {
+          swal('Você não está logado', '', 'warning');
+          navigate('/');
+          localStorage.clear();
+        }
+      });
     setSideMenu(false);
   }, [navigate, setUserImage, setUserId, setToken, location.pathname]);
 

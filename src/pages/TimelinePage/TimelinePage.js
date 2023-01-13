@@ -26,10 +26,11 @@ export default function Timeline() {
       swal('Usuário não logado!', 'Faça o login novamente para acessar suas informações.', 'error');
       setLoadingPage(false);
       navigate('/');
+    } else {
+      setToken(localStorage.token);
+      setUserId(localStorage.user_id);
+      setUserImage(localStorage.user_image);
     }
-    setToken(localStorage.token);
-    setUserId(localStorage.user_id);
-    setUserImage(localStorage.user_image);
     const config = {
       headers: {
         authorization: `Bearer ${localStorage.token}`,
