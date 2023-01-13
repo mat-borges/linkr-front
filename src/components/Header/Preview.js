@@ -1,6 +1,7 @@
-import { detailColor, publishColor, textPublishColor } from '../../constants/colors.js';
+import { detailColor, detailCommentColor, publishColor, textPublishColor } from '../../constants/colors.js';
 import { useEffect, useRef } from 'react';
 
+import { FaCircle } from 'react-icons/fa';
 import { MagnifyingGlass } from 'react-loader-spinner';
 import TrendingBox from '../../components/TrendingBox.js';
 import styled from 'styled-components';
@@ -11,6 +12,7 @@ export default function Preview(props) {
   const navigate = useNavigate();
   const ulRef = useRef(null);
   const minLength = 3;
+  const following = JSON.parse(localStorage.following);
 
   function handleClick(result) {
     let path = '';
@@ -55,8 +57,20 @@ export default function Preview(props) {
       {results?.map((result, index) => {
         return (
           <li key={index} onClick={() => handleClick(result)}>
-            {result.image ? <img src={result.image} alt='mock' /> : <></>}
+            {result.image ? <img src={result.image} alt={result.name} /> : <></>}
             <p>{result.name}</p>
+            {following.find((e) => e.user_id === result.user_id) ? (
+              <>
+                <FaCircle
+                  size={'0.4rem'}
+                  style={{ margin: '0 0.3em', filter: 'opacity(0.6)' }}
+                  color={detailCommentColor}
+                />
+                <p style={{ filter: 'opacity(0.6)' }}>following</p>
+              </>
+            ) : (
+              ''
+            )}
           </li>
         );
       })}
@@ -81,6 +95,7 @@ const PreviewContainer = styled.ul`
     display: flex;
     align-items: center;
     max-width: 100%;
+    margin-bottom: 0.6em;
     color: ${textPublishColor};
     font-size: 1.1rem;
     cursor: pointer;
