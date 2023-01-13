@@ -16,6 +16,7 @@ export default function Timeline() {
   const [loadingPage, setLoadingPage] = useState(true);
   const [refreshPage, setRefreshPage] = useState(false);
   const [error, setError] = useState(false);
+const [follow, setFollow] = useState([])
   const { setToken, setUserId, setUserImage } = useContext(CustomerContext);
   const navigate = useNavigate();
 
@@ -36,6 +37,7 @@ export default function Timeline() {
         authorization: `Bearer ${localStorage.token}`,
       },
     };
+    setFollow(JSON.parse(localStorage.following))
 
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/timeline`, config)
@@ -48,7 +50,6 @@ export default function Timeline() {
         setError(true);
       });
   }, [refreshPage, navigate, setToken, setUserId, setUserImage]);
-
   if (loadingPage === true) {
     return (
       <Main>
@@ -135,9 +136,12 @@ export default function Timeline() {
                   setRefreshPage={setRefreshPage}
                 />
               ))
-            ) : (
-              <ErrorMessage>Ainda não há posts</ErrorMessage>
-            )}
+            ) : follow.length !== 0 ? 
+              <ErrorMessage>No posts found from your friends</ErrorMessage>
+              :
+              <ErrorMessage>You don't follow anyone yet. Search for new friends!</ErrorMessage>
+            
+            }
           </LeftBox>
           <RightBox>
             <TrendingBox
