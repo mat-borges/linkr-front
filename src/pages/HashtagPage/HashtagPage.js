@@ -15,11 +15,16 @@ export default function Hashtag() {
   const [posts, setPosts] = useState([]);
   const [loadingPage, setLoadingPage] = useState(true);
   const [error, setError] = useState();
-  const [refreshPage, setRefreshPage] = useState(false);
+  const [refreshPage] = useState(false);
   const { setToken, setUserId, setUserImage } = useContext(CustomerContext);
-  const [actualPostCount, setActualPostCount] = useState(0);
   const [newPosts, setNewPosts] = useState([]);
+  const [delay, setDelay] = useState(null);
   const navigate = useNavigate();
+
+  useInterval(() => {
+    console.log("use interval");
+    SearchForNewPosts(localStorage.getItem("token"));
+  }, delay);
 
   async function SearchForNewPosts(token) {
     const config = {
@@ -33,15 +38,14 @@ export default function Hashtag() {
         `${process.env.REACT_APP_API_BASE_URL}/hashtag/${hashtag}`,
         config
       );
-      setNewPosts(data);
-
       if (JSON.stringify(data) !== JSON.stringify(posts)) {
-        const diffArr = [];
-        for (let i = data.length-1; i >=0; i--) {
-          if (JSON.stringify(data[i]) !== JSON.stringify(posts[i])) {
+        let diffArr = [];
+        for (let i = 0; i < data.length; i++) {
+          if (JSON.stringify(posts).includes(JSON.stringify(data[i]))) {
+            continue;
+          } else {
             diffArr.push(data[i]);
           }
-          console.log(diffArr);
           setNewPosts(diffArr);
         }
       }
@@ -51,17 +55,6 @@ export default function Hashtag() {
       }
     }
   }
-
-  const tempToken = localStorage.getItem("token");
-  const config = {
-    headers: {
-      authorization: `Bearer ${tempToken}`,
-    },
-  };
-
-  useInterval(() => {
-    SearchForNewPosts(tempToken);
-  }, 5000);
 
   useEffect(() => {
     setLoadingPage(true);
@@ -89,7 +82,7 @@ export default function Hashtag() {
         setPosts(res.data);
         setNewPosts(res.data);
         setLoadingPage(false);
-        setActualPostCount(res.data.length);
+        setDelay(15000);
       })
       .catch((err) => {
         setLoadingPage(false);
@@ -107,7 +100,11 @@ export default function Hashtag() {
     setUserImage,
     navigate,
   ]);
-
+function AddNewPostsToPostsList(){
+  const newPostsList =[...newPosts,...posts]
+  setPosts(newPostsList);
+  setNewPosts(newPostsList);
+}
   if (loadingPage === true) {
     return (
       <Main>
@@ -147,11 +144,12 @@ export default function Hashtag() {
         <AreaUtil>
           <Title># {hashtag}</Title>
           {JSON.stringify(newPosts) !== JSON.stringify(posts) ? (
-            <RefreshPostsButton>{newPosts.length}, new posts, load more!</RefreshPostsButton>
+            <RefreshPostsButton AddNewPostsToPostsList={AddNewPostsToPostsList}>
+              {newPosts.length}, new posts, load more!
+            </RefreshPostsButton>
           ) : (
             false
           )}
-
           {posts !== [] ? (
             <PostList posts={posts} />
           ) : (
